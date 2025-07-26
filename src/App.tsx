@@ -1,8 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
+import Facturar from "./pages/Facturar";
+import Productos from "./pages/Productos";
+import Inventario from "./pages/Inventario";
+
 
 const App = () => {
   return (
@@ -10,8 +12,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
+          <Route path="facturar" element={<Facturar />} />
+          <Route path="productos" element={<Productos />} />
+          <Route path="inventario" element={<Inventario />} />
         </Route>
       </Routes>
     </BrowserRouter>
