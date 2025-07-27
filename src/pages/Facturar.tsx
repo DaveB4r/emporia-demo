@@ -1,8 +1,12 @@
+import GeneralForm from "../components/facturar/GeneralForm";
+
 const Facturar = () => {
   return (
     <div className="flex flex-col md:flex-row">
-      <div className="border border-red-500 h-32 w-full">gi</div>
-      <div className="tabs tabs-box w-full">
+      <div className="shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300 min-h-32 w-full">
+        <GeneralForm />
+      </div>
+      <div className="tabs tabs-box w-full shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300">
         <input
           type="radio"
           name="my_tabs_6"
