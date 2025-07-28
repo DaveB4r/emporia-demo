@@ -1,8 +1,73 @@
 import { X } from "lucide-react";
+import type { IProducto } from "../../interfaces/IProducto";
+import {
+  useEffect,
+  useState,
+  type Dispatch,
+  type FormEvent,
+  type SetStateAction,
+} from "react";
+import ToastMessage from "../resources/ToastMessage";
 
-const GeneralForm = () => {
+type Props = {
+  productos: IProducto[];
+  setProductos: Dispatch<SetStateAction<IProducto[]>>;
+};
+
+const GeneralForm = ({ productos, setProductos }: Props) => {
+  let id = Math.random().toString(36).substring(2, 10);
+  const [toastInfo, setToastInfo] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
+  const [formInputs, setFormInputs] = useState<IProducto>({
+    id: id,
+    codigo: "",
+    unidades: 0,
+    precio: "",
+    descripcion: "",
+  });
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setToastInfo({
+        show: false,
+        message: "",
+        type: "",
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [toastInfo]);
+
+  const formatWithSeparator = (value: string) => {
+    const cleaned = value.replace(/[^\d]/g, "");
+    return cleaned ? Number(cleaned).toLocaleString("es-CO") : "";
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    id = Math.random().toString(36).substring(2, 10);
+    setProductos((prev) => [...prev, formInputs]);
+    setFormInputs({
+      id: id,
+      codigo: "",
+      unidades: 0,
+      precio: "",
+      descripcion: "",
+    });
+    setToastInfo({
+      show: true,
+      message: "Producto Guardado Satisfactoriamente",
+      type: "alert-success",
+    });
+  };
+
   return (
-    <form className="flex flex-col bg-base-200 py-4">
+    <form className="flex flex-col bg-base-200 py-4" onSubmit={handleSubmit}>
+      {toastInfo.show && (
+        <ToastMessage type={toastInfo.type} message={toastInfo.message} />
+      )}
       <fieldset className="fieldset border-base-300 rounded-box border p-4">
         <legend className="fieldset-legend uppercase font-bold text-2xl text-center">
           facturar
@@ -17,6 +82,10 @@ const GeneralForm = () => {
               id="codigo"
               className="input"
               placeholder="1234"
+              value={formInputs.codigo}
+              onChange={(e) =>
+                setFormInputs((prev) => ({ ...prev, codigo: e.target.value }))
+              }
             />
           </div>
           <div className="form-control">
@@ -24,10 +93,18 @@ const GeneralForm = () => {
               Unidades
             </label>
             <input
-              type="text"
+              type="number"
+              min={1}
               id="unidades"
               className="input"
               placeholder="2"
+              value={formInputs.unidades}
+              onChange={(e) =>
+                setFormInputs((prev) => ({
+                  ...prev,
+                  unidades: Number(e.target.value),
+                }))
+              }
             />
           </div>
           <div className="form-control">
@@ -39,6 +116,13 @@ const GeneralForm = () => {
               id="precio"
               className="input"
               placeholder="50.000"
+              value={formInputs.precio}
+              onChange={(e) =>
+                setFormInputs((prev) => ({
+                  ...prev,
+                  precio: formatWithSeparator(e.target.value),
+                }))
+              }
             />
           </div>
         </div>
@@ -50,7 +134,14 @@ const GeneralForm = () => {
             id="descripcion"
             className="textarea h-24 w-full"
             placeholder="Descripcion"
-          ></textarea>
+            value={formInputs.descripcion}
+            onChange={(e) =>
+              setFormInputs((prev) => ({
+                ...prev,
+                descripcion: e.target.value,
+              }))
+            }
+          />
         </div>
         <button
           type="submit"
@@ -76,33 +167,23 @@ const GeneralForm = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>2</td>
-              <td>1234</td>
-              <td>Camiseta</td>
-              <td>$ 50.000</td>
-              <td>
-                <X className="cursor-pointer text-red-500" />
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>1254</td>
-              <td>Jean</td>
-              <td>$ 90.000</td>
-              <td>
-                <X className="cursor-pointer text-red-500" />
-              </td>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>1487</td>
-              <td>Chaqueta</td>
-              <td>$ 150.000</td>
-              <td>
-                <X className="cursor-pointer text-red-500" />
-              </td>
-            </tr>
+            {productos.length > 0 ? (
+              productos.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.unidades}</td>
+                  <td>{item.codigo}</td>
+                  <td>{item.descripcion}</td>
+                  <td>$ {item.precio}</td>
+                  <td>
+                    <X className="cursor-pointer text-red-500" />
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5}>No hay productos agregados</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

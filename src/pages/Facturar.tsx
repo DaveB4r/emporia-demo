@@ -1,10 +1,14 @@
+import { useState } from "react";
 import GeneralForm from "../components/facturar/GeneralForm";
+import type { IProducto } from "../interfaces/IProducto";
 
 const Facturar = () => {
+  const [productos, setProductos] = useState<IProducto[]>([]);
+
   return (
     <div className="flex flex-col md:flex-row">
       <div className="shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300 min-h-32 w-full">
-        <GeneralForm />
+        <GeneralForm productos={productos} setProductos={setProductos} />
       </div>
       <div className="tabs tabs-box w-full shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300">
         <input
