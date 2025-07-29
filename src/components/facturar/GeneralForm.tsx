@@ -1,4 +1,3 @@
-import { X } from "lucide-react";
 import type { IProducto } from "../../interfaces/IProducto";
 import {
   useEffect,
@@ -8,6 +7,8 @@ import {
   type SetStateAction,
 } from "react";
 import ToastMessage from "../resources/ToastMessage";
+import TableProductos from "./TableProductos";
+import { formatWithSeparator } from "../../utils/formatValue";
 
 type Props = {
   productos: IProducto[];
@@ -39,11 +40,6 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
     }, 3000);
     return () => clearTimeout(timer);
   }, [toastInfo]);
-
-  const formatWithSeparator = (value: string) => {
-    const cleaned = value.replace(/[^\d]/g, "");
-    return cleaned ? Number(cleaned).toLocaleString("es-CO") : "";
-  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -147,45 +143,16 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
           type="submit"
           className="btn btn-neutral btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
         >
-          Guardar
+          Agregar
         </button>
       </fieldset>
       <div className="over-flow-x-auto flex flex-col gap-2 bg-white border border-gray-300 rounded-lg mx-4">
-        <div className="w-full border-b-2 ">
+        <div className="w-full border-b-2">
           <h3 className="py-4 uppercase  text-center font-bold">
             Productos agregados
           </h3>
         </div>
-        <table className="table table-zebra">
-          <thead>
-            <tr>
-              <th>Unidades</th>
-              <th>Codigo</th>
-              <th>Descripcion</th>
-              <th>Precio</th>
-              <th>Eliminar</th>
-            </tr>
-          </thead>
-          <tbody>
-            {productos.length > 0 ? (
-              productos.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.unidades}</td>
-                  <td>{item.codigo}</td>
-                  <td>{item.descripcion}</td>
-                  <td>$ {item.precio}</td>
-                  <td>
-                    <X className="cursor-pointer text-red-500" />
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={5}>No hay productos agregados</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+        <TableProductos productos={productos} setProductos={setProductos} />
       </div>
     </form>
   );

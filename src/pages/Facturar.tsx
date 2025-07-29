@@ -1,6 +1,7 @@
 import { useState } from "react";
 import GeneralForm from "../components/facturar/GeneralForm";
 import type { IProducto } from "../interfaces/IProducto";
+import TabContado from "../components/facturar/contado/TabContado";
 
 const Facturar = () => {
   const [productos, setProductos] = useState<IProducto[]>([]);
@@ -19,7 +20,7 @@ const Facturar = () => {
           defaultChecked
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          Tab Contado
+          <TabContado productos={productos} />
         </div>
         <input
           type="radio"
