@@ -26,7 +26,7 @@ const Sidebar = () => {
               to="/facturar"
               className="flex gap-2 text-xl hover:text-zinc-300 items-center py-1"
             >
-              {location.pathname === "/facturar" && <span className="bg-sky-400 h-8 w-2" />}
+              {location.pathname === "/facturar" && <span className="bg-sky-400 h-8 w-2 rounded-sm" />}
               <ReceiptText /> Facturar
             </Link>
           </li>

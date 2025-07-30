@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { IProducto } from "../../../interfaces/IProducto";
 import DatosCliente from "./DatosCliente";
 import { formatWithSeparator } from "../../../utils/formatValue";
+import type { IClienteContado } from "../../../interfaces/IClienteContado";
 
 type Props = {
   productos: IProducto[];
@@ -10,23 +11,34 @@ type Props = {
 const TabContado = ({ productos }: Props) => {
   const [subtotal, setSubtotal] = useState(0);
   const [iva, setIva] = useState(0);
+  const [datosCliente, setDatosCliente] = useState<IClienteContado>({
+    cedula: "",
+    verificacion: "",
+    nombre: "",
+    apellido: "",
+    correo: "",
+    celular: "",
+  });
 
   useEffect(() => {
+    let subTotal = 0;
     if (productos.length > 0) {
-      let subTotal = 0;
       productos.map((producto) => {
         subTotal +=
           Number(String(producto.precio).replaceAll(".", "")) *
           producto.unidades;
       });
-      setIva(subTotal * 0.19);
-      setSubtotal(subTotal);
     }
+    setIva(subTotal * 0.19);
+    setSubtotal(subTotal);
   }, [productos]);
 
   return (
     <div className="flex flex-col w-full bg-base-200 py-4">
-      <DatosCliente />
+      <DatosCliente
+        datosCliente={datosCliente}
+        setDatosCliente={setDatosCliente}
+      />
       <div className="flex flex-col w-full gap-3">
         <div className="w-full border-b-2">
           <h3 className="py-4 uppercase text-center font-bold text-2xl">
@@ -48,7 +60,10 @@ const TabContado = ({ productos }: Props) => {
           {" $"}
           {formatWithSeparator(String(subtotal + iva))}
         </p>
-        <button className="btn btn-neutral btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">
+        <button
+          className="btn btn-neutral btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
+          disabled={subtotal === 0}
+        >
           Finalizar venta
         </button>
       </div>

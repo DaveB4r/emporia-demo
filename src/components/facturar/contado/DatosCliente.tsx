@@ -1,4 +1,12 @@
-const DatosCliente = () => {
+import type { Dispatch, SetStateAction } from "react";
+import type { IClienteContado } from "../../../interfaces/IClienteContado";
+
+type Props = {
+  datosCliente: IClienteContado;
+  setDatosCliente: Dispatch<SetStateAction<IClienteContado>>;
+};
+
+const DatosCliente = ({ datosCliente, setDatosCliente }: Props) => {
   return (
     <form className="flex flex-col py-4">
       <fieldset className="fieldset border-base-300 rounded-box border p-4">
@@ -15,6 +23,10 @@ const DatosCliente = () => {
               id="cedula"
               className="input"
               placeholder="1017455658"
+              value={datosCliente.cedula}
+              onChange={(e) =>
+                setDatosCliente((prev) => ({ ...prev, cedula: e.target.value }))
+              }
             />
           </div>
           <div className="form-control w-full">
@@ -26,6 +38,13 @@ const DatosCliente = () => {
               id="verificacion"
               className="input"
               placeholder="2"
+              value={datosCliente.verificacion}
+              onChange={(e) =>
+                setDatosCliente((prev) => ({
+                  ...prev,
+                  verificacion: e.target.value,
+                }))
+              }
             />
           </div>
         </div>
@@ -39,6 +58,10 @@ const DatosCliente = () => {
               id="nombre"
               className="input"
               placeholder="John"
+              value={datosCliente.nombre}
+              onChange={(e) =>
+                setDatosCliente((prev) => ({ ...prev, nombre: e.target.value }))
+              }
             />
           </div>
           <div className="form-control w-full">
@@ -50,6 +73,13 @@ const DatosCliente = () => {
               id="apellido"
               className="input"
               placeholder="Doe"
+              value={datosCliente.apellido}
+              onChange={(e) =>
+                setDatosCliente((prev) => ({
+                  ...prev,
+                  apellido: e.target.value,
+                }))
+              }
             />
           </div>
         </div>
@@ -63,6 +93,10 @@ const DatosCliente = () => {
               id="correo"
               className="input"
               placeholder="johndoe@mail.co"
+              value={datosCliente.correo}
+              onChange={(e) =>
+                setDatosCliente((prev) => ({ ...prev, correo: e.target.value }))
+              }
             />
           </div>
           <div className="form-control w-full">
@@ -74,6 +108,13 @@ const DatosCliente = () => {
               id="celular"
               className="input"
               placeholder="3004158877"
+              value={datosCliente.celular}
+              onChange={(e) =>
+                setDatosCliente((prev) => ({
+                  ...prev,
+                  celular: e.target.value,
+                }))
+              }
             />
           </div>
         </div>
