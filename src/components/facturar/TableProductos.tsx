@@ -4,12 +4,14 @@ import type { Dispatch, SetStateAction } from "react";
 
 type Props = {
   productos: IProducto[];
-  setProductos: Dispatch<SetStateAction<IProducto[]>>;
+  setProductos?: Dispatch<SetStateAction<IProducto[]>>;
+  venta?: boolean;
 };
 
-const TableProductos = ({ productos, setProductos }: Props) => {
+const TableProductos = ({ productos, setProductos, venta }: Props) => {
   const deleteProducto = (id: string) => {
-    setProductos((prev) => prev.filter((producto) => producto.id != id));
+    if (setProductos)
+      setProductos((prev) => prev.filter((producto) => producto.id != id));
   };
 
   return (
@@ -20,7 +22,7 @@ const TableProductos = ({ productos, setProductos }: Props) => {
           <th>Codigo</th>
           <th>Descripcion</th>
           <th>Precio</th>
-          <th>Eliminar</th>
+          {!venta && <th>Eliminar</th>}
         </tr>
       </thead>
       <tbody>
@@ -31,12 +33,14 @@ const TableProductos = ({ productos, setProductos }: Props) => {
               <td>{item.codigo}</td>
               <td>{item.descripcion}</td>
               <td>$ {item.precio}</td>
-              <td>
-                <X
-                  onClick={() => deleteProducto(item.id)}
-                  className="cursor-pointer text-red-500"
-                />
-              </td>
+              {!venta && (
+                <td>
+                  <X
+                    onClick={() => deleteProducto(item.id)}
+                    className="cursor-pointer text-red-500"
+                  />
+                </td>
+              )}
             </tr>
           ))
         ) : (

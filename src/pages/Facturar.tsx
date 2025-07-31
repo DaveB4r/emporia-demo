@@ -20,7 +20,7 @@ const Facturar = () => {
           defaultChecked
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          <TabContado productos={productos} />
+          <TabContado productos={productos} setProductos={setProductos} />
         </div>
         <input
           type="radio"
