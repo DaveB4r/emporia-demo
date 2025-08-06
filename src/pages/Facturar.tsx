@@ -2,6 +2,7 @@ import { useState } from "react";
 import GeneralForm from "../components/facturar/GeneralForm";
 import type { IProducto } from "../interfaces/IProducto";
 import TabContado from "../components/facturar/contado/TabContado";
+import TabCredito from "../components/facturar/credito/TabCredito";
 
 const Facturar = () => {
   const [productos, setProductos] = useState<IProducto[]>([]);
@@ -29,7 +30,7 @@ const Facturar = () => {
           aria-label="Credito"
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          Tab Credito
+          <TabCredito productos={productos} setProductos={setProductos} />
         </div>
         <input
           type="radio"

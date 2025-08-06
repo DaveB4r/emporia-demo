@@ -6,8 +6,8 @@ import {
   type SetStateAction,
 } from "react";
 import type { IProducto } from "../../../interfaces/IProducto";
-import DatosCliente from "./DatosCliente";
-import type { IClienteContado } from "../../../interfaces/IClienteContado";
+import type { IClienteCredito } from "../../../interfaces/IClienteCredito";
+import DatosCredito from "./DatosCredito";
 import ResumenVenta from "../ResumenVenta";
 import ModalVenta from "../ModalVenta";
 
@@ -16,20 +16,20 @@ type Props = {
   setProductos: Dispatch<SetStateAction<IProducto[]>>;
 };
 
-const TabContado = ({ productos, setProductos }: Props) => {
-  const initialCliente: IClienteContado = {
+const TabCredito = ({ productos, setProductos }: Props) => {
+  const initialCredito: IClienteCredito = {
+    cupo: 0,
     cedula: "",
-    verificacion: "",
-    nombre: "",
-    apellido: "",
-    correo: "",
-    celular: "",
+    nombres: "",
+    periodos: "",
+    diasGracia: 0,
+    opcionesCuota: 0,
   };
   const [subtotal, setSubtotal] = useState(0);
   const [iva, setIva] = useState(0);
-  const [datosCliente, setDatosCliente] =
-    useState<IClienteContado>(initialCliente);
-  const [errors, setErrors] = useState<IClienteContado>(initialCliente);
+  const [datosCredito, setDatosCredito] =
+    useState<IClienteCredito>(initialCredito);
+  const [errors, setErrors] = useState<IClienteCredito>(initialCredito);
 
   useEffect(() => {
     let subTotal = 0;
@@ -45,54 +45,47 @@ const TabContado = ({ productos, setProductos }: Props) => {
   }, [productos]);
 
   const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setErrors(initialCliente);
-    if (!datosCliente.cedula) {
+    e.preventDefault();    
+    const total = subtotal + iva;
+    setErrors(initialCredito);
+    if (datosCredito.cupo < total) {
+      setErrors((prev) => ({ ...prev, cupo: -1 }));
+      return false;
+    } else if (!datosCredito.cedula) {
       setErrors((prev) => ({
         ...prev,
-        cedula: "Por favor ingrese el numero de cedula!",
+        cedula: "Por favor ingrese el numero de cedula del cliente.",
       }));
       return false;
-    } else if (!datosCliente.verificacion) {
+    } else if (!datosCredito.nombres) {
       setErrors((prev) => ({
         ...prev,
-        verificacion: "Por favor ingrese el digito de verificacion!",
+        nombres: "Por favor ingrese los nombres del cliente.",
       }));
       return false;
-    } else if (!datosCliente.nombre) {
+    } else if (!datosCredito.periodos) {
       setErrors((prev) => ({
         ...prev,
-        nombre: "Por favor ingrese el Nombre!",
+        periodos: "Por favor seleccione un periodo",
       }));
       return false;
-    } else if (!datosCliente.apellido) {
-      setErrors((prev) => ({
-        ...prev,
-        apellido: "Por favor ingrese el apellido",
-      }));
+    } else if (datosCredito.diasGracia === 0) {
+      setErrors((prev) => ({ ...prev, diasGracia: -1 }));
       return false;
-    } else if (!datosCliente.correo) {
-      setErrors((prev) => ({
-        ...prev,
-        correo: "Por favor ingrese el correo!",
-      }));
-      return false;
-    } else if (!datosCliente.celular) {
-      setErrors((prev) => ({
-        ...prev,
-        celular: "Por favor ingrese el celular!",
-      }));
+    } else if (datosCredito.opcionesCuota === 0) {
+      setErrors((prev) => ({ ...prev, opcionesCuota: -1 }));
       return false;
     }
-    document.getElementById("modal_venta").showModal();
+    document.getElementById("modal_venta_credito").showModal();
   };
 
   return (
     <div className="flex flex-col w-full bg-base-200 py-4">
-      <DatosCliente
-        datosCliente={datosCliente}
-        setDatosCliente={setDatosCliente}
+      <DatosCredito
+        datosCredito={datosCredito}
+        setDatosCredito={setDatosCredito}
         errors={errors}
+        total={subtotal + iva}
       />
       <ResumenVenta subtotal={subtotal} iva={iva} />
       <button
@@ -103,19 +96,19 @@ const TabContado = ({ productos, setProductos }: Props) => {
         Finalizar Venta
       </button>
       <ModalVenta
-        id="modal_venta"
+        id="modal_venta_credito"
         productos={productos}
-        datosCliente={datosCliente}
+        datosCredito={datosCredito}
         subtotal={subtotal}
         iva={iva}
-        setDatosCliente={setDatosCliente}
+        setDatosCredito={setDatosCredito}
         setProductos={setProductos}
         setIva={setIva}
         setSubtotal={setSubtotal}
-        initialCliente={initialCliente}
+        initialCredito={initialCredito}
       />
     </div>
   );
 };
 
-export default TabContado;
+export default TabCredito;
