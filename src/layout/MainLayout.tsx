@@ -7,7 +7,7 @@ const MainLayout = () => {
   return (
     <div className="flex h-screen font-sans antialiased">
       <Sidebar />
-      <div className="flex flex-col flex-1">
+      <div className="flex flex-col flex-1 ml-20 md:ml-64">
         <Navbar />
         <main className="flex-1 overflow-auto p-6">
           <Outlet />
