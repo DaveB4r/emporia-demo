@@ -24,7 +24,7 @@ const Sidebar = () => {
         {isSidebarOpen && (
           <Link to="/" className="hover:text-zinc-300">
             <img
-              src="/images/logo-white.png"
+              src="/images/white-logo.webp"
               alt="logo"
               className="w-28 md:w-48"
               width={100}
