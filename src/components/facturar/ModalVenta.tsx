@@ -67,10 +67,30 @@ const ModalVenta = ({
             <div className="flex flex-col gap-2 my-2 py-2 border-b-1 border-b-black">
               <div className="flex flex-col justify-between">
                 <p className="text-xl font-bold">{datosCredito.nombres}</p>
-                <p className="text-lg font-bold">Cedula: <span className="text-md font-normal">{datosCredito.cedula}</span></p>
-                <p className="text-lg font-bold">Periodos: <span className="text-md font-normal">{datosCredito.periodos}</span></p>
-                <p className="text-lg font-bold">Dias de gracia: <span className="text-md font-normal">{datosCredito.diasGracia}</span></p>
-                <p className="text-lg font-bold">Numero de cuotas: <span className="text-md font-normal">{datosCredito.opcionesCuota}</span></p>
+                <p className="text-lg font-bold">
+                  Cedula:{" "}
+                  <span className="text-md font-normal">
+                    {datosCredito.cedula}
+                  </span>
+                </p>
+                <p className="text-lg font-bold">
+                  Periodos:{" "}
+                  <span className="text-md font-normal">
+                    {datosCredito.periodos}
+                  </span>
+                </p>
+                <p className="text-lg font-bold">
+                  Dias de gracia:{" "}
+                  <span className="text-md font-normal">
+                    {datosCredito.diasGracia}
+                  </span>
+                </p>
+                <p className="text-lg font-bold">
+                  Numero de cuotas:{" "}
+                  <span className="text-md font-normal">
+                    {datosCredito.opcionesCuota}
+                  </span>
+                </p>
                 <p className="text-lg font-bold">
                   Valor Cuota:{" "}
                   <span className="font-bold text-red-600">
@@ -108,6 +128,33 @@ const ModalVenta = ({
                   $ {formatWithSeparator(String(iva + subtotal))}
                 </td>
               </tr>
+              {datosCliente?.abono && (
+                <tr>
+                  <td colSpan={3} className="w-[77%] font-black">
+                    Abono
+                  </td>
+                  <td>
+                    $ {formatWithSeparator(String(datosCliente.abono))}
+                  </td>
+                </tr>
+              )}
+              {datosCliente?.abono && (
+                <tr>
+                  <td colSpan={3} className="w-[77%] font-black">
+                    Resta
+                  </td>
+                  <td className="font-black">
+                    ${" "}
+                    {formatWithSeparator(
+                      String(
+                        iva +
+                          subtotal -
+                          Number(String(datosCliente.abono).replaceAll(".", ""))
+                      )
+                    )}
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

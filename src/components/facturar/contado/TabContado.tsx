@@ -10,13 +10,15 @@ import DatosCliente from "./DatosCliente";
 import type { IClienteContado } from "../../../interfaces/IClienteContado";
 import ResumenVenta from "../ResumenVenta";
 import ModalVenta from "../ModalVenta";
+import { formatWithSeparator } from "../../../utils/formatValue";
 
 type Props = {
   productos: IProducto[];
   setProductos: Dispatch<SetStateAction<IProducto[]>>;
+  type: "contado" | "separado";
 };
 
-const TabContado = ({ productos, setProductos }: Props) => {
+const TabContado = ({ productos, setProductos, type }: Props) => {
   const initialCliente: IClienteContado = {
     cedula: "",
     verificacion: "",
@@ -25,6 +27,8 @@ const TabContado = ({ productos, setProductos }: Props) => {
     correo: "",
     celular: "",
   };
+  if (type === "separado") initialCliente.abono = "";
+  const [id] = useState(`modal_venta_${type}`);
   const [subtotal, setSubtotal] = useState(0);
   const [iva, setIva] = useState(0);
   const [datosCliente, setDatosCliente] =
@@ -47,6 +51,8 @@ const TabContado = ({ productos, setProductos }: Props) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setErrors(initialCliente);
+    const total = subtotal + iva;
+
     if (!datosCliente.cedula) {
       setErrors((prev) => ({
         ...prev,
@@ -83,8 +89,23 @@ const TabContado = ({ productos, setProductos }: Props) => {
         celular: "Por favor ingrese el celular!",
       }));
       return false;
+    } else if (type === "separado" && !datosCliente.abono) {
+      setErrors((prev) => ({
+        ...prev,
+        abono: "Por favor indique cuanto desea abonar!",
+      }));
+      return false;
+    } else if (
+      total < Number(String(datosCliente.abono).replaceAll(".", "")) &&
+      type === "separado"
+    ) {
+      setErrors((prev) => ({
+        ...prev,
+        abono: "El abono no puede ser mayor al valor a pagar!",
+      }));
+      return false;
     }
-    document.getElementById("modal_venta").showModal();
+    document.getElementById(id).showModal();
   };
 
   return (
@@ -95,6 +116,29 @@ const TabContado = ({ productos, setProductos }: Props) => {
         errors={errors}
       />
       <ResumenVenta subtotal={subtotal} iva={iva} />
+      {type === "separado" && (
+        <div className="form-control my-2 w-full flex flex-col justify-center items-center">
+          <label
+            htmlFor="abono"
+            className="label text-black text-4xl uppercase font-bold mb-2"
+          >
+            Abono
+          </label>
+          <input
+            type="text"
+            className={`w-[80%] input ${errors.abono && "input-error"}`}
+            placeholder="50.000"
+            value={datosCliente.abono}
+            onChange={(e) =>
+              setDatosCliente((prev) => ({
+                ...prev,
+                abono: formatWithSeparator(e.target.value),
+              }))
+            }
+          />
+          <small className="text-red-600 text-sm">{errors.abono}</small>
+        </div>
+      )}
       <button
         className="btn btn-neutral btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
         disabled={subtotal === 0}
@@ -103,7 +147,7 @@ const TabContado = ({ productos, setProductos }: Props) => {
         Finalizar Venta
       </button>
       <ModalVenta
-        id="modal_venta"
+        id={id}
         productos={productos}
         datosCliente={datosCliente}
         subtotal={subtotal}

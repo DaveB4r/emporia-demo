@@ -5,4 +5,5 @@ export interface IClienteContado {
   apellido: string;
   correo: string;
   celular: string;
+  abono?: string;
 }

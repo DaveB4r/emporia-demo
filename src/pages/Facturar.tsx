@@ -21,7 +21,7 @@ const Facturar = () => {
           defaultChecked
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          <TabContado productos={productos} setProductos={setProductos} />
+          <TabContado productos={productos} setProductos={setProductos} type="contado"/>
         </div>
         <input
           type="radio"
@@ -39,7 +39,7 @@ const Facturar = () => {
           aria-label="Separado"
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          Tab Separado
+          <TabContado productos={productos} setProductos={setProductos} type="separado"/>
         </div>
       </div>
     </div>
