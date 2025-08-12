@@ -23,7 +23,8 @@ const TabCredito = ({ productos, setProductos }: Props) => {
     nombres: "",
     periodos: "",
     diasGracia: 0,
-    opcionesCuota: 0,
+    numCuotas: 0,
+    valorCuota: "",
   };
   const [subtotal, setSubtotal] = useState(0);
   const [iva, setIva] = useState(0);
@@ -40,12 +41,13 @@ const TabCredito = ({ productos, setProductos }: Props) => {
           producto.unidades;
       });
     }
-    setIva(subTotal * 0.19);
-    setSubtotal(subTotal);
+    const newSubtotal = Math.ceil(subTotal / 1.19);
+    setSubtotal(newSubtotal);
+    setIva(subTotal - newSubtotal);
   }, [productos]);
 
   const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();    
+    e.preventDefault();
     const total = subtotal + iva;
     setErrors(initialCredito);
     if (datosCredito.cupo < total) {
@@ -72,8 +74,8 @@ const TabCredito = ({ productos, setProductos }: Props) => {
     } else if (datosCredito.diasGracia === 0) {
       setErrors((prev) => ({ ...prev, diasGracia: -1 }));
       return false;
-    } else if (datosCredito.opcionesCuota === 0) {
-      setErrors((prev) => ({ ...prev, opcionesCuota: -1 }));
+    } else if (datosCredito.numCuotas === 0) {
+      setErrors((prev) => ({ ...prev, numCuotas: -1 }));
       return false;
     }
     document.getElementById("modal_venta_credito").showModal();

@@ -1,4 +1,5 @@
 import {
+  useState,
   type ChangeEvent,
   type Dispatch,
   type SetStateAction,
@@ -32,6 +33,7 @@ const DatosCredito = ({
   errors,
   total,
 }: Props) => {
+  const [opcionesDeCuotas, setOpcionesDeCuotas] = useState<number[]>([]);
   const getName = (cedula: string) => {
     const data = nombres.filter((nombre) => nombre.cedula === cedula)[0];
     setDatosCredito((prev) => ({
@@ -41,12 +43,32 @@ const DatosCredito = ({
     }));
   };
 
-  const handleCuotas = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCuotas = (
+    e: ChangeEvent<HTMLInputElement>,
+    index: number,
+    opcion: number
+  ) => {
     setDatosCredito((prev) => ({
       ...prev,
-      opcionesCuota: Number(e.target.value),
+      numCuotas: Number(e.target.value),
+      valorCuota: valCuota(index, opcion),
     }));
   };
+
+  const handlePeriodos = (e: ChangeEvent<HTMLSelectElement>) => {
+    setDatosCredito((prev) => ({
+      ...prev,
+      periodos: e.target.value,
+    }));
+    setOpcionesDeCuotas([]);
+    const numPeriodos = e.target.value === "quincenal" ? 2 : 1;
+    for (let i = 2 * numPeriodos; i < 6 * numPeriodos; i += numPeriodos) {
+      setOpcionesDeCuotas((prev) => [...prev, i]);
+    }
+  };
+
+  const valCuota = (index: number, opcion: number) =>
+    String(Math.ceil((total + total * (0.15 + index * 0.025)) / opcion));
 
   return (
     <div className="flex flex-col items-center">
@@ -112,17 +134,11 @@ const DatosCredito = ({
                 id="periodos"
                 className={`select ${errors.periodos && "select-error"}`}
                 value={datosCredito.periodos || ""}
-                onChange={(e) =>
-                  setDatosCredito((prev) => ({
-                    ...prev,
-                    periodos: e.target.value,
-                  }))
-                }
+                onChange={handlePeriodos}
               >
                 <option disabled value="">
                   Selecciona un periodo
                 </option>
-                <option value="semanal">Semanal</option>
                 <option value="quincenal">Quincenal</option>
                 <option value="mensual">Mensual</option>
               </select>
@@ -153,79 +169,38 @@ const DatosCredito = ({
               </small>
             </div>
           </div>
-          <div className="flex flex-col gap-2 mt-2">
-            <h3 className="text-xl text-black font-bold uppercase">
-              opciones de cuota
-            </h3>
-            <small className="text-red-600 text-sm">
-              {errors.opcionesCuota === -1 &&
-                "por favor seleccione las cuotas."}
-            </small>
-            <label htmlFor="opCompra1" className="label text-black">
-              <input
-                type="radio"
-                className="radio radio-primary"
-                id="opCompra1"
-                name="opCompra"
-                value={2}
-                onChange={handleCuotas}
-              />
-              <span className="text-lg font-black">
-                2 Cuotas ${" "}
-                {total > 0
-                  ? formatWithSeparator(String(Math.ceil(total / 2)))
-                  : 0}
-              </span>
-            </label>
-            <label htmlFor="opCompra2" className="label text-black">
-              <input
-                type="radio"
-                className="radio radio-primary"
-                id="opCompra2"
-                name="opCompra"
-                value={3}
-                onChange={handleCuotas}
-              />
-              <span className="text-lg font-black">
-                3 Cuotas ${" "}
-                {total > 0
-                  ? formatWithSeparator(String(Math.ceil(total / 3)))
-                  : 0}
-              </span>
-            </label>
-            <label htmlFor="opCompra3" className="label text-black">
-              <input
-                type="radio"
-                className="radio radio-primary"
-                id="opCompra3"
-                name="opCompra"
-                value={4}
-                onChange={handleCuotas}
-              />
-              <span className="text-lg font-black">
-                4 Cuotas ${" "}
-                {total > 0
-                  ? formatWithSeparator(String(Math.ceil(total / 4)))
-                  : 0}
-              </span>
-            </label>
-            <label htmlFor="opCompra4" className="label text-black">
-              <input
-                type="radio"
-                className="radio radio-primary"
-                id="opCompra4"
-                name="opCompra"
-                value={5}
-                onChange={handleCuotas}
-              />
-              <span className="text-lg font-black">
-                5 Cuotas ${" "}
-                {total > 0
-                  ? formatWithSeparator(String(Math.ceil(total / 5)))
-                  : 0}
-              </span>
-            </label>
-          </div>
+          {opcionesDeCuotas.length > 0 && (
+            <div className="flex flex-col gap-2 mt-2">
+              <h3 className="text-xl text-black font-bold uppercase">
+                opciones de cuota
+              </h3>
+              <small className="text-red-600 text-sm">
+                {errors.numCuotas === -1 && "por favor seleccione las cuotas."}
+              </small>
+              {opcionesDeCuotas.map((opcion, index) => (
+                <label
+                  htmlFor={`opCompra${opcion}`}
+                  className="label text-black"
+                  key={index}
+                >
+                  <input
+                    type="radio"
+                    className="radio radio-primary"
+                    id={`opCompra${opcion}`}
+                    name="opCompra"
+                    value={opcion}
+                    onChange={(e) => handleCuotas(e, index, opcion)}
+                  />
+                  <span className="text-lg font-black">
+                    {opcion} Cuotas ${" "}
+                    {total > 0
+                      ? formatWithSeparator(valCuota(index, opcion))
+                      : 0}
+                  </span>
+                </label>
+              ))}
+            </div>
+          )}
         </fieldset>
       </form>
     </div>

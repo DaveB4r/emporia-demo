@@ -88,18 +88,13 @@ const ModalVenta = ({
                 <p className="text-lg font-bold">
                   Numero de cuotas:{" "}
                   <span className="text-md font-normal">
-                    {datosCredito.opcionesCuota}
+                    {datosCredito.numCuotas}
                   </span>
                 </p>
                 <p className="text-lg font-bold">
                   Valor Cuota:{" "}
                   <span className="font-bold text-red-600">
-                    $
-                    {formatWithSeparator(
-                      String(
-                        Math.ceil((subtotal + iva) / datosCredito.opcionesCuota)
-                      )
-                    )}
+                    ${formatWithSeparator(datosCredito.valorCuota)}
                   </span>
                 </p>
               </div>
@@ -133,9 +128,7 @@ const ModalVenta = ({
                   <td colSpan={3} className="w-[77%] font-black">
                     Abono
                   </td>
-                  <td>
-                    $ {formatWithSeparator(String(datosCliente.abono))}
-                  </td>
+                  <td>$ {formatWithSeparator(String(datosCliente.abono))}</td>
                 </tr>
               )}
               {datosCliente?.abono && (

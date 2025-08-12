@@ -4,5 +4,6 @@ export interface IClienteCredito {
   cupo: number;
   periodos: string;
   diasGracia: number;
-  opcionesCuota: number; 
+  numCuotas: number;
+  valorCuota: string; 
 }
