@@ -1,7 +1,14 @@
+import AddProduct from "../components/productos/AddProduct";
+
 const Productos = () => {
   return (
-    <div>Productos</div>
-  )
-}
+    <div className="flex flex-col md:flex-row justify-between">
+      <div className="w-full md:w-[20%] min-h-64">
+        <AddProduct />
+      </div>
+      <div className="w-full md:w-[80%] border-8 border-red-500 min-h-64"></div>
+    </div>
+  );
+};
 
-export default Productos
+export default Productos;

@@ -44,8 +44,9 @@ const TabContado = ({ productos, setProductos, type }: Props) => {
           producto.unidades;
       });
     }
-    setIva(subTotal * 0.19);
-    setSubtotal(subTotal);
+    const newSubtotal = Math.ceil(subTotal / 1.19)
+    setSubtotal(newSubtotal);
+    setIva(subTotal - newSubtotal);
   }, [productos]);
 
   const handleSubmit = (e: FormEvent) => {
