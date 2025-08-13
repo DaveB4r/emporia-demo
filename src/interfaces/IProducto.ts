@@ -1,7 +1,13 @@
 export interface IProducto {
   id: string;
-  codigo: string;
-  unidades: number;
-  descripcion: string;
-  precio: string;
+  imagen?: string;
+  precioEntrada?: string;
+  precioVenta: string;
+  linea?: string;
+  categoria?: string;
+  subCategoria?: string;
+  nombre: string;
+  referencia: string;
+  descripcion?: string;
+  unidades?: number;
 }

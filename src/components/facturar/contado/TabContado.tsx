@@ -40,11 +40,11 @@ const TabContado = ({ productos, setProductos, type }: Props) => {
     if (productos.length > 0) {
       productos.map((producto) => {
         subTotal +=
-          Number(String(producto.precio).replaceAll(".", "")) *
-          producto.unidades;
+          Number(String(producto.precioVenta).replaceAll(".", "")) *
+          Number(producto.unidades);
       });
     }
-    const newSubtotal = Math.ceil(subTotal / 1.19)
+    const newSubtotal = Math.ceil(subTotal / 1.19);
     setSubtotal(newSubtotal);
     setIva(subTotal - newSubtotal);
   }, [productos]);

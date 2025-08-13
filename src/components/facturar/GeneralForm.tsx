@@ -24,16 +24,16 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
   });
   const [formInputs, setFormInputs] = useState<IProducto>({
     id: id,
-    codigo: "",
+    nombre: "",
+    referencia: "",
     unidades: 0,
-    precio: "",
-    descripcion: "",
+    precioVenta: "",
   });
   const [errors, setErrors] = useState({
-    codigo: "",
+    referencia: "",
     unidades: "",
-    precio: "",
-    descripcion: "",
+    precioVenta: "",
+    nombre: "",
   });
 
   useEffect(() => {
@@ -49,8 +49,8 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setErrors({ codigo: "", unidades: "", precio: "", descripcion: "" });
-    if (!formInputs.codigo) {
+    setErrors({ referencia: "", unidades: "", precioVenta: "", nombre: "" });
+    if (!formInputs.referencia) {
       setErrors((prev) => ({
         ...prev,
         codigo: "Por favor indique el codigo del producto",
@@ -62,16 +62,16 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
         unidades: "Las unidades deben ser mayor a 0",
       }));
       return false;
-    } else if (!formInputs.precio) {
+    } else if (!formInputs.precioVenta) {
       setErrors((prev) => ({
         ...prev,
         precio: "Por favor indique el precio.",
       }));
       return false;
-    } else if(!formInputs.descripcion) {
+    } else if (!formInputs.nombre) {
       setErrors((prev) => ({
         ...prev,
-        descripcion: "Por favor indique una descripcion."
+        descripcion: "Por favor indique una descripcion.",
       }));
       return false;
     }
@@ -79,10 +79,10 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
     setProductos((prev) => [...prev, formInputs]);
     setFormInputs({
       id: id,
-      codigo: "",
+      referencia: "",
       unidades: 0,
-      precio: "",
-      descripcion: "",
+      precioVenta: "",
+      nombre: "",
     });
     setToastInfo({
       show: true,
@@ -108,14 +108,14 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
             <input
               type="text"
               id="codigo"
-              className={`input ${errors.codigo && "input-error"}`}
+              className={`input ${errors.referencia && "input-error"}`}
               placeholder="1234"
-              value={formInputs.codigo}
+              value={formInputs.referencia}
               onChange={(e) =>
                 setFormInputs((prev) => ({ ...prev, codigo: e.target.value }))
               }
             />
-            <small className="text-sm text-red-700">{errors.codigo}</small>
+            <small className="text-sm text-red-700">{errors.referencia}</small>
           </div>
           <div className="form-control flex flex-col">
             <label htmlFor="unidades" className="label text-black">
@@ -143,9 +143,9 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
             <input
               type="text"
               id="precio"
-              className={`input ${errors.precio && "input-error"}`}
+              className={`input ${errors.precioVenta && "input-error"}`}
               placeholder="50.000"
-              value={formInputs.precio}
+              value={formInputs.precioVenta}
               onChange={(e) =>
                 setFormInputs((prev) => ({
                   ...prev,
@@ -153,17 +153,19 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
                 }))
               }
             />
-            <small className="text-sm text-red-700">{errors.precio}</small>
+            <small className="text-sm text-red-700">{errors.precioVenta}</small>
           </div>
         </div>
         <div className="form-control flex flex-col">
-          <label htmlFor="descripcion" className="text-black">
-            Descripcion producto
+          <label htmlFor="nombre" className="text-black">
+            Nombre producto
           </label>
           <textarea
-            id="descripcion"
-            className={`textarea h-24 w-full ${errors.descripcion && "textarea-error"}`}
-            placeholder="Descripcion"
+            id="nombre"
+            className={`textarea h-24 w-full ${
+              errors.nombre && "textarea-error"
+            }`}
+            placeholder="Nombre"
             value={formInputs.descripcion}
             onChange={(e) =>
               setFormInputs((prev) => ({
@@ -172,7 +174,7 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
               }))
             }
           />
-          <small className="text-sm text-red-700">{errors.descripcion}</small>
+          <small className="text-sm text-red-700">{errors.nombre}</small>
         </div>
         <button
           type="submit"

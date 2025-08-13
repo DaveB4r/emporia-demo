@@ -20,7 +20,7 @@ const TableProductos = ({ productos, setProductos, venta }: Props) => {
         <tr>
           <th>Unidades</th>
           <th>Codigo</th>
-          <th>Descripcion</th>
+          <th>Nombre</th>
           <th>Precio</th>
           {!venta && <th>Eliminar</th>}
         </tr>
@@ -30,9 +30,9 @@ const TableProductos = ({ productos, setProductos, venta }: Props) => {
           productos.map((item, index) => (
             <tr key={index}>
               <td>{item.unidades}</td>
-              <td>{item.codigo}</td>
-              <td>{item.descripcion}</td>
-              <td>$ {item.precio}</td>
+              <td>{item.referencia}</td>
+              <td>{item.nombre}</td>
+              <td>$ {item.precioVenta}</td>
               {!venta && (
                 <td>
                   <X

@@ -37,8 +37,8 @@ const TabCredito = ({ productos, setProductos }: Props) => {
     if (productos.length > 0) {
       productos.map((producto) => {
         subTotal +=
-          Number(String(producto.precio).replaceAll(".", "")) *
-          producto.unidades;
+          Number(String(producto.precioVenta).replaceAll(".", "")) *
+          Number(producto.unidades);
       });
     }
     const newSubtotal = Math.ceil(subTotal / 1.19);
