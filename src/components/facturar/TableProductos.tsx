@@ -1,24 +1,21 @@
 import { X } from "lucide-react";
-import type { IProducto } from "../../interfaces/IProducto";
-import type { Dispatch, SetStateAction } from "react";
+import { useAppContext } from "../../context/AppContext";
 
 type Props = {
-  productos: IProducto[];
-  setProductos?: Dispatch<SetStateAction<IProducto[]>>;
   venta?: boolean;
 };
 
-const TableProductos = ({ productos, setProductos, venta }: Props) => {
+const TableProductos = ({ venta }: Props) => {
+  const { state, dispatch } = useAppContext();
   const deleteProducto = (id: string) => {
-    if (setProductos)
-      setProductos((prev) => prev.filter((producto) => producto.id != id));
+    dispatch({ type: "DELETE_PRODUCT", productId: id });
   };
 
   return (
     <table className="table table-zebra">
       <thead>
         <tr>
-          <th>Unidades</th>
+          <th>Imagen</th>
           <th>Codigo</th>
           <th>Nombre</th>
           <th>Precio</th>
@@ -26,10 +23,18 @@ const TableProductos = ({ productos, setProductos, venta }: Props) => {
         </tr>
       </thead>
       <tbody>
-        {productos.length > 0 ? (
-          productos.map((item, index) => (
+        {state.productos.length > 0 ? (
+          state.productos.map((item, index) => (
             <tr key={index}>
-              <td>{item.unidades}</td>
+              <td>
+                <img
+                  src={item.imagen}
+                  alt={item.nombre}
+                  width={100}
+                  height={100}
+                  className="w-20 h-20 object-cover"
+                />
+              </td>
               <td>{item.referencia}</td>
               <td>{item.nombre}</td>
               <td>$ {item.precioVenta}</td>

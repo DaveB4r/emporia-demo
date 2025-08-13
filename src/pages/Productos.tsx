@@ -1,3 +1,4 @@
+import TableProductos from "../components/facturar/TableProductos";
 import AddProduct from "../components/productos/AddProduct";
 
 const Productos = () => {
@@ -6,7 +7,9 @@ const Productos = () => {
       <div className="w-full md:w-[25%] min-h-64">
         <AddProduct />
       </div>
-      <div className="w-full md:w-[75%] border-8 border-red-500 min-h-64"></div>
+      <div className="w-full md:w-[75%]  min-h-64">
+        <TableProductos />
+      </div>
     </div>
   );
 };

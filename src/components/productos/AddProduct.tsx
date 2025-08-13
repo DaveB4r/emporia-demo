@@ -1,11 +1,19 @@
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import type { IProducto } from "../../interfaces/IProducto";
 import { formatWithSeparator } from "../../utils/formatValue";
+import { useAppContext } from "../../context/AppContext";
+import ToastMessage from "../resources/ToastMessage";
 
 const AddProduct = () => {
-  const [file, setFile] = useState<File | null>(null);
-  const [data, setData] = useState<IProducto>({
-    id: "",
+  const { dispatch } = useAppContext();
+  const [toastInfo, setToastInfo] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
+  let id = Math.random().toString(36).substring(2, 10);
+  const initialProducto = {
+    id: id,
     imagen: "",
     precioEntrada: "",
     precioVenta: "",
@@ -16,7 +24,19 @@ const AddProduct = () => {
     referencia: "",
     descripcion: "",
     unidades: 0,
-  });
+  };
+  const [data, setData] = useState<IProducto>(initialProducto);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setToastInfo({
+        show: false,
+        message: "",
+        type: "",
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [toastInfo]);
 
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target!.files![0];
@@ -25,7 +45,6 @@ const AddProduct = () => {
     if (fileSizeinMB > 10) {
       return;
     }
-    setFile(file);
     previewFile(file);
   };
 
@@ -37,12 +56,31 @@ const AddProduct = () => {
     };
   };
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    id = Math.random().toString(36).substring(2, 10);
+    setData((prev) => ({ ...prev, id: id }));
+    dispatch({ type: "ADD_PRODUCT", producto: data });
+    setData(initialProducto);
+    setToastInfo({
+      show: true,
+      message: "Producto Guardado satisfactoriamente",
+      type: "alert-success",
+    });
+  };
+
   return (
     <div className="flex flex-col justify-center items-center">
+      {toastInfo.show && (
+        <ToastMessage type={toastInfo.type} message={toastInfo.message} />
+      )}
       <h3 className="text-2xl text-center capitalize p-4 bg-black w-full rounded-t-lg font-bold text-white">
         Nuevo producto
       </h3>
-      <form className="space-y-4 bg-slate-200 p-4 w-full rounded-b-2xl">
+      <form
+        className="space-y-4 bg-slate-200 p-4 w-full rounded-b-2xl"
+        onSubmit={handleSubmit}
+      >
         <div className="my-2">
           <label
             htmlFor="imagen"
@@ -112,7 +150,7 @@ const AddProduct = () => {
               onChange={(e) =>
                 setData((prev) => ({
                   ...prev,
-                  linea: formatWithSeparator(e.target.value),
+                  linea: e.target.value,
                 }))
               }
             />
@@ -127,7 +165,7 @@ const AddProduct = () => {
               onChange={(e) =>
                 setData((prev) => ({
                   ...prev,
-                  categoria: formatWithSeparator(e.target.value),
+                  categoria: e.target.value,
                 }))
               }
             />
@@ -144,7 +182,7 @@ const AddProduct = () => {
               onChange={(e) =>
                 setData((prev) => ({
                   ...prev,
-                  subCategoria: formatWithSeparator(e.target.value),
+                  subCategoria: e.target.value,
                 }))
               }
             />
@@ -162,7 +200,7 @@ const AddProduct = () => {
               onChange={(e) =>
                 setData((prev) => ({
                   ...prev,
-                  nombre: formatWithSeparator(e.target.value),
+                  nombre: e.target.value,
                 }))
               }
             />
@@ -177,7 +215,7 @@ const AddProduct = () => {
               onChange={(e) =>
                 setData((prev) => ({
                   ...prev,
-                  referencia: formatWithSeparator(e.target.value),
+                  referencia: e.target.value,
                 }))
               }
             />
@@ -194,7 +232,7 @@ const AddProduct = () => {
               onChange={(e) =>
                 setData((prev) => ({
                   ...prev,
-                  descripcion: formatWithSeparator(e.target.value),
+                  descripcion: e.target.value,
                 }))
               }
             />

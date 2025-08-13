@@ -189,7 +189,7 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
             Productos agregados
           </h3>
         </div>
-        <TableProductos productos={productos} setProductos={setProductos} />
+        <TableProductos />
       </div>
     </form>
   );
