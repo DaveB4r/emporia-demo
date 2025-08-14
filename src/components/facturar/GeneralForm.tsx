@@ -7,7 +7,6 @@ import {
   type SetStateAction,
 } from "react";
 import ToastMessage from "../resources/ToastMessage";
-import TableProductos from "./TableProductos";
 import { formatWithSeparator } from "../../utils/formatValue";
 
 type Props = {
@@ -189,7 +188,7 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
             Productos agregados
           </h3>
         </div>
-        <TableProductos />
+        {/* <TableProductos /> */}
       </div>
     </form>
   );

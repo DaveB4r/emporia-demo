@@ -1,4 +1,4 @@
-import TableProductos from "../components/facturar/TableProductos";
+import TableProductos from "../components/productos/TableProductos";
 import AddProduct from "../components/productos/AddProduct";
 
 const Productos = () => {

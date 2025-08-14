@@ -1,7 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import type { IClienteContado } from "../../interfaces/IClienteContado";
 import type { IProducto } from "../../interfaces/IProducto";
-import TableProductos from "./TableProductos";
 import { formatWithSeparator } from "../../utils/formatValue";
 import type { IClienteCredito } from "../../interfaces/IClienteCredito";
 
@@ -100,7 +99,7 @@ const ModalVenta = ({
               </div>
             </div>
           )}
-          <TableProductos productos={productos} venta={true} />
+          {/* <TableProductos venta={true} /> */}
           <table className="table table-zebra">
             <tbody>
               <tr>

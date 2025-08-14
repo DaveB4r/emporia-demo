@@ -62,6 +62,7 @@ const AddProduct = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     id = Math.random().toString(36).substring(2, 10);
+    let variacionErrors = false;
     setData((prev) => ({ ...prev, id: id }));
     setErrors(initialProducto);
     if (!data.imagen) {
@@ -120,6 +121,45 @@ const AddProduct = () => {
       }));
       return;
     }
+    if (
+      Number(String(data.precioEntrada).replaceAll(".", "")) >
+      Number(String(data.precioVenta).replaceAll(".", ""))
+    ) {
+      setErrors((prev) => ({
+        ...prev,
+        precioEntrada:
+          "El Precio de entrada no puede ser mayor al precio de venta!",
+      }));
+      return;
+    }
+    if (data.variaciones && data.variaciones.length > 0) {
+      data.variaciones?.map((v) => {
+        if (!v.nombre) {
+          setErrors((prev) => ({
+            ...prev,
+            variaciones: [
+              ...(prev.variaciones || []),
+              { ...v, nombre: "Por favor ingrese el nombre de la variacion" },
+            ],
+          }));
+          variacionErrors = true;
+          return;
+        }
+        if (!v.valor) {
+          setErrors((prev) => ({
+            ...prev,
+            variaciones: [
+              ...(prev.variaciones || []),
+              { ...v, valor: "Por favor ingrese el valor de la variacion" },
+            ],
+          }));
+          variacionErrors = true;
+          return;
+        }
+      });
+    }
+    if (variacionErrors) return;
+    console.log(variacionErrors);
     dispatch({ type: "ADD_PRODUCT", producto: data });
     setData(initialProducto);
     setToastInfo({
@@ -325,7 +365,9 @@ const AddProduct = () => {
               }
             />
             {errors.referencia && (
-              <small className="text-xs text-red-700">{errors.referencia}</small>
+              <small className="text-xs text-red-700">
+                {errors.referencia}
+              </small>
             )}
           </label>
           <label htmlFor="unidades" className="capitalize">
@@ -343,7 +385,9 @@ const AddProduct = () => {
               }
             />
             {errors.unidades === -1 && (
-              <small className="text-xs text-red-700">Por favor indique las unidades</small>
+              <small className="text-xs text-red-700">
+                Por favor indique las unidades
+              </small>
             )}
           </label>
         </div>
@@ -367,72 +411,104 @@ const AddProduct = () => {
         {data.variaciones &&
           data.variaciones.length > 0 &&
           data.variaciones.map((variacion) => (
-            <div className="flex flex-col md:flex-row" key={variacion.id}>
-              <label htmlFor={`nombreVariacion${variacion.id}`} className="">
-                <b className="text-xs">Nombre Variacion</b>
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="Color"
-                  id={`nombreVariacion${variacion.id}`}
-                  value={variacion.nombre}
-                  onChange={(e) =>
-                    setData((prev) => ({
-                      ...prev,
-                      variaciones: prev.variaciones?.map((v) =>
-                        v.id === variacion.id
-                          ? { ...v, nombre: e.target.value }
-                          : v
-                      ),
-                    }))
-                  }
+            <div className="flex flex-col" key={variacion.id}>
+              <div className="flex flex-col md:flex-row">
+                <label htmlFor={`nombreVariacion${variacion.id}`} className="">
+                  <b className="text-xs">Nombre Variacion</b>
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder="Color"
+                    id={`nombreVariacion${variacion.id}`}
+                    value={variacion.nombre}
+                    onChange={(e) =>
+                      setData((prev) => ({
+                        ...prev,
+                        variaciones: prev.variaciones?.map((v) =>
+                          v.id === variacion.id
+                            ? { ...v, nombre: e.target.value }
+                            : v
+                        ),
+                      }))
+                    }
+                  />
+                </label>
+                <label htmlFor={`valorVariacion${variacion.id}`} className="">
+                  <b className="text-xs">Valor Variacion</b>
+                  <input
+                    type="text"
+                    className="input"
+                    placeholder="Rojo"
+                    id={`valorVariacion${variacion.id}`}
+                    value={variacion.valor}
+                    onChange={(e) =>
+                      setData((prev) => ({
+                        ...prev,
+                        variaciones: prev.variaciones?.map((v) =>
+                          v.id === variacion.id
+                            ? { ...v, valor: e.target.value }
+                            : v
+                        ),
+                      }))
+                    }
+                  />
+                </label>
+                <label
+                  htmlFor={`unidadesVariacion${variacion.id}`}
+                  className=""
+                >
+                  <b className="text-xs">Unidades Variacion</b>
+                  <input
+                    type="number"
+                    className="input"
+                    placeholder="0"
+                    min={1}
+                    id={`unidadesVariacion${variacion.id}`}
+                    value={variacion.unidades}
+                    onChange={(e) =>
+                      setData((prev) => ({
+                        ...prev,
+                        variaciones: prev.variaciones?.map((v) =>
+                          v.id === variacion.id
+                            ? { ...v, unidades: Number(e.target.value) }
+                            : v
+                        ),
+                      }))
+                    }
+                  />
+                </label>
+                <X
+                  className="w-12 h-12 text-red-600 cursor-pointer"
+                  onClick={() => deleteVariacion(variacion.id)}
                 />
-              </label>
-              <label htmlFor={`valorVariacion${variacion.id}`} className="">
-                <b className="text-xs">Valor Variacion</b>
-                <input
-                  type="text"
-                  className="input"
-                  placeholder="Rojo"
-                  id={`valorVariacion${variacion.id}`}
-                  value={variacion.valor}
-                  onChange={(e) =>
-                    setData((prev) => ({
-                      ...prev,
-                      variaciones: prev.variaciones?.map((v) =>
-                        v.id === variacion.id
-                          ? { ...v, valor: e.target.value }
-                          : v
-                      ),
-                    }))
-                  }
-                />
-              </label>
-              <label htmlFor={`unidadesVariacion${variacion.id}`} className="">
-                <b className="text-xs">Unidades Variacion</b>
-                <input
-                  type="number"
-                  className="input"
-                  placeholder="0"
-                  min={1}
-                  id={`unidadesVariacion${variacion.id}`}
-                  value={variacion.unidades}
-                  onChange={(e) =>
-                    setData((prev) => ({
-                      ...prev,
-                      variaciones: prev.variaciones?.map((v) =>
-                        v.id === variacion.id
-                          ? { ...v, unidades: Number(e.target.value) }
-                          : v
-                      ),
-                    }))
-                  }
-                />
-              </label>
-              <X
-                className="w-12 h-12 text-red-600 cursor-pointer"
-                onClick={() => deleteVariacion(variacion.id)}
-              />
+              </div>
+              {errors.variaciones &&
+                errors.variaciones.length > 0 &&
+                errors.variaciones.map((errorVariacion) =>
+                  errorVariacion.id === variacion.id &&
+                  errorVariacion.nombre !== variacion.nombre ? (
+                    <small
+                      key={`error-${errorVariacion.id}`}
+                      className="text-red-700"
+                    >
+                      {errorVariacion.nombre}
+                    </small>
+                  ) : errorVariacion.valor !== variacion.valor ? (
+                    <small
+                      key={`error-${errorVariacion.id}`}
+                      className="text-red-700"
+                    >
+                      {errorVariacion.valor}
+                    </small>
+                  ) : (
+                    <small
+                      key={`error-${errorVariacion.id}`}
+                      className="text-red-700"
+                    >
+                      {errorVariacion.unidades}
+                    </small>
+                  )
+                )}
             </div>
           ))}
         <div className="space-y-2 flex justify-center items-center">
