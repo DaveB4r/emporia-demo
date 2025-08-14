@@ -1,4 +1,4 @@
-import { Menu, ReceiptText, Shapes, ShoppingCart, X } from "lucide-react";
+import { Menu, ReceiptText, ShoppingCart, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -107,30 +107,6 @@ const Sidebar = () => {
               isSidebarOpen ? "justify-start" : "justify-center"
             } ${location.pathname === "/inventario" && "bg-zinc-800"}`}
           >
-            <Link
-              to="/inventario"
-              className="flex items-center px-4 py-3 text-lg gap-1"
-            >
-              {location.pathname === "/inventario" && (
-                <span className="bg-sky-400 h-8 w-2 rounded-sm" />
-              )}
-              <Shapes
-                size={isSidebarOpen ? 24 : 32}
-                className={`mr-0 ${
-                  isSidebarOpen ? "md:mr-3" : "md:mr-0"
-                } transition-all duration-200`}
-              />
-              <span
-                className={`transition-all duration-200 ${
-                  isSidebarOpen
-                    ? "opacity-100 w-auto"
-                    : "opacity-0 w-0 overflow-hidden"
-                } md:opacity-100 md:w-auto`}
-              >
-                Inventario
-              </span>
-              <span className="sr-only">Productos</span>
-            </Link>
           </li>
         </ul>
       </nav>

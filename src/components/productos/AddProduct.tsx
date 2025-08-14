@@ -1,8 +1,9 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
-import type { IProducto } from "../../interfaces/IProducto";
+import type { IProducto, IVariacion } from "../../interfaces/IProducto";
 import { formatWithSeparator } from "../../utils/formatValue";
 import { useAppContext } from "../../context/AppContext";
 import ToastMessage from "../resources/ToastMessage";
+import { Plus, X } from "lucide-react";
 
 const AddProduct = () => {
   const { dispatch } = useAppContext();
@@ -12,7 +13,7 @@ const AddProduct = () => {
     type: "",
   });
   let id = Math.random().toString(36).substring(2, 10);
-  const initialProducto = {
+  const initialProducto: IProducto = {
     id: id,
     imagen: "",
     precioEntrada: "",
@@ -24,8 +25,10 @@ const AddProduct = () => {
     referencia: "",
     descripcion: "",
     unidades: 0,
+    variaciones: [],
   };
   const [data, setData] = useState<IProducto>(initialProducto);
+  const [errors, setErrors] = useState<IProducto>(initialProducto);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -60,6 +63,63 @@ const AddProduct = () => {
     e.preventDefault();
     id = Math.random().toString(36).substring(2, 10);
     setData((prev) => ({ ...prev, id: id }));
+    setErrors(initialProducto);
+    if (!data.imagen) {
+      setErrors((prev) => ({
+        ...prev,
+        imagen: "¡Selecciones una foto!",
+      }));
+      return;
+    }
+    if (!data.precioEntrada) {
+      setErrors((prev) => ({
+        ...prev,
+        precioEntrada: "¡Indique el precio de entrada!",
+      }));
+      return;
+    }
+    if (!data.precioVenta) {
+      setErrors((prev) => ({
+        ...prev,
+        precioVenta: "¡Indique el precio de venta!",
+      }));
+      return;
+    }
+    if (!data.linea) {
+      setErrors((prev) => ({
+        ...prev,
+        linea: "¡Indique la linea!",
+      }));
+      return;
+    }
+    if (!data.categoria) {
+      setErrors((prev) => ({
+        ...prev,
+        categoria: "¡Indique la categoria!",
+      }));
+      return;
+    }
+    if (!data.nombre) {
+      setErrors((prev) => ({
+        ...prev,
+        nombre: "¡Indique el nombre de producto!",
+      }));
+      return;
+    }
+    if (!data.referencia) {
+      setErrors((prev) => ({
+        ...prev,
+        referencia: "¡Indique la referencia de producto!",
+      }));
+      return;
+    }
+    if (data.unidades === 0) {
+      setErrors((prev) => ({
+        ...prev,
+        unidades: -1,
+      }));
+      return;
+    }
     dispatch({ type: "ADD_PRODUCT", producto: data });
     setData(initialProducto);
     setToastInfo({
@@ -67,6 +127,27 @@ const AddProduct = () => {
       message: "Producto Guardado satisfactoriamente",
       type: "alert-success",
     });
+  };
+
+  const addVariacion = () => {
+    const idVariacion = Math.random().toString(36).substring(2, 10);
+    const newVariacion: IVariacion = {
+      id: idVariacion,
+      nombre: "",
+      valor: "",
+      unidades: 0,
+    };
+    setData((prev) => ({
+      ...prev,
+      variaciones: [...(prev.variaciones || []), newVariacion],
+    }));
+  };
+
+  const deleteVariacion = (id: string) => {
+    setData((prev) => ({
+      ...prev,
+      variaciones: [...(prev.variaciones?.filter((v) => v.id !== id) || [])],
+    }));
   };
 
   return (
@@ -86,13 +167,18 @@ const AddProduct = () => {
             htmlFor="imagen"
             className="flex flex-col justify-center items-center gap-2"
           >
-            <b>Foto Producto</b>
+            <b className="text-sm">Foto Producto</b>
             <input
               type="file"
               id="imagen"
-              className="input"
+              className={`file-input file-input-xs ${
+                errors.imagen ? "file-input-error" : "file-input-neutral"
+              }`}
               onChange={handleChangeImage}
             />
+            {errors.imagen && (
+              <small className="text-xs text-red-700">{errors.imagen}</small>
+            )}
             {data.imagen && (
               <div className="space-y-2">
                 <img
@@ -108,11 +194,11 @@ const AddProduct = () => {
         </div>
         <div className="flex space-y-2 flex-col md:flex-row gap-2">
           <label htmlFor="precioEntrada" className="capitalize">
-            <b>Precio entrada</b>
+            <b className="text-sm">Precio entrada</b>
             <input
               type="text"
               id="precioEntrada"
-              className="input"
+              className={`input ${errors.precioEntrada && "input-error"}`}
               value={data.precioEntrada}
               onChange={(e) =>
                 setData((prev) => ({
@@ -121,13 +207,18 @@ const AddProduct = () => {
                 }))
               }
             />
+            {errors.precioEntrada && (
+              <small className="text-xs text-red-700">
+                {errors.precioEntrada}
+              </small>
+            )}
           </label>
           <label htmlFor="precioVenta" className="capitalize">
-            <b>Precio Venta</b>
+            <b className="text-sm">Precio Venta</b>
             <input
               type="text"
               id="precioVenta"
-              className="input"
+              className={`input ${errors.precioVenta && "input-error"}`}
               value={data.precioVenta}
               onChange={(e) =>
                 setData((prev) => ({
@@ -136,16 +227,21 @@ const AddProduct = () => {
                 }))
               }
             />
+            {errors.precioVenta && (
+              <small className="text-xs text-red-700">
+                {errors.precioVenta}
+              </small>
+            )}
           </label>
         </div>
         <hr />
         <div className="flex space-y-2 flex-col md:flex-row gap-2">
           <label htmlFor="linea" className="capitalize">
-            <b>linea</b>
+            <b className="text-sm">linea</b>
             <input
               type="text"
               id="linea"
-              className="input"
+              className={`input ${errors.linea && "input-error"}`}
               value={data.linea}
               onChange={(e) =>
                 setData((prev) => ({
@@ -154,13 +250,16 @@ const AddProduct = () => {
                 }))
               }
             />
+            {errors.linea && (
+              <small className="text-xs text-red-700">{errors.linea}</small>
+            )}
           </label>
           <label htmlFor="categoria" className="capitalize">
-            <b>categoria</b>
+            <b className="text-sm">categoria</b>
             <input
               type="text"
               id="categoria"
-              className="input"
+              className={`input ${errors.categoria && "input-error"}`}
               value={data.categoria}
               onChange={(e) =>
                 setData((prev) => ({
@@ -169,11 +268,14 @@ const AddProduct = () => {
                 }))
               }
             />
+            {errors.categoria && (
+              <small className="text-xs text-red-700">{errors.categoria}</small>
+            )}
           </label>
         </div>
         <div className="flex space-y-2 flex-col md:flex-row gap-2 justify-center items-center">
           <label htmlFor="subCategoria" className="capitalize text-center">
-            <b>sub Categoria</b>
+            <b className="text-sm">sub Categoria</b>
             <input
               type="text"
               id="subCategoria"
@@ -191,11 +293,11 @@ const AddProduct = () => {
         <hr />
         <div className="flex space-y-2 flex-col md:flex-row gap-2">
           <label htmlFor="nombre" className="capitalize">
-            <b>Nombre Producto</b>
+            <b className="text-sm">Nombre Producto</b>
             <input
               type="text"
               id="nombre"
-              className="input"
+              className={`input ${errors.nombre && "input-error"}`}
               value={data.nombre}
               onChange={(e) =>
                 setData((prev) => ({
@@ -204,13 +306,16 @@ const AddProduct = () => {
                 }))
               }
             />
+            {errors.nombre && (
+              <small className="text-xs text-red-700">{errors.nombre}</small>
+            )}
           </label>
           <label htmlFor="referencia" className="capitalize">
-            <b>referencia</b>
+            <b className="text-sm">referencia</b>
             <input
               type="text"
               id="referencia"
-              className="input"
+              className={`input ${errors.referencia && "input-error"}`}
               value={data.referencia}
               onChange={(e) =>
                 setData((prev) => ({
@@ -219,11 +324,32 @@ const AddProduct = () => {
                 }))
               }
             />
+            {errors.referencia && (
+              <small className="text-xs text-red-700">{errors.referencia}</small>
+            )}
+          </label>
+          <label htmlFor="unidades" className="capitalize">
+            <b className="text-sm">unidades</b>
+            <input
+              type="number"
+              id="unidades"
+              className={`input ${errors.unidades === -1 && "input-error"}`}
+              value={data.unidades}
+              onChange={(e) =>
+                setData((prev) => ({
+                  ...prev,
+                  unidades: Number(e.target.value),
+                }))
+              }
+            />
+            {errors.unidades === -1 && (
+              <small className="text-xs text-red-700">Por favor indique las unidades</small>
+            )}
           </label>
         </div>
         <div className="flex space-y-2 flex-col md:flex-row gap-2 justify-center items-center">
           <label htmlFor="descripcion" className="capitalize text-center">
-            <b>Descripcion producto</b>
+            <b className="text-sm">Descripcion producto</b>
             <input
               type="text"
               id="descripcion"
@@ -237,6 +363,86 @@ const AddProduct = () => {
               }
             />
           </label>
+        </div>
+        {data.variaciones &&
+          data.variaciones.length > 0 &&
+          data.variaciones.map((variacion) => (
+            <div className="flex flex-col md:flex-row" key={variacion.id}>
+              <label htmlFor={`nombreVariacion${variacion.id}`} className="">
+                <b className="text-xs">Nombre Variacion</b>
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="Color"
+                  id={`nombreVariacion${variacion.id}`}
+                  value={variacion.nombre}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      variaciones: prev.variaciones?.map((v) =>
+                        v.id === variacion.id
+                          ? { ...v, nombre: e.target.value }
+                          : v
+                      ),
+                    }))
+                  }
+                />
+              </label>
+              <label htmlFor={`valorVariacion${variacion.id}`} className="">
+                <b className="text-xs">Valor Variacion</b>
+                <input
+                  type="text"
+                  className="input"
+                  placeholder="Rojo"
+                  id={`valorVariacion${variacion.id}`}
+                  value={variacion.valor}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      variaciones: prev.variaciones?.map((v) =>
+                        v.id === variacion.id
+                          ? { ...v, valor: e.target.value }
+                          : v
+                      ),
+                    }))
+                  }
+                />
+              </label>
+              <label htmlFor={`unidadesVariacion${variacion.id}`} className="">
+                <b className="text-xs">Unidades Variacion</b>
+                <input
+                  type="number"
+                  className="input"
+                  placeholder="0"
+                  min={1}
+                  id={`unidadesVariacion${variacion.id}`}
+                  value={variacion.unidades}
+                  onChange={(e) =>
+                    setData((prev) => ({
+                      ...prev,
+                      variaciones: prev.variaciones?.map((v) =>
+                        v.id === variacion.id
+                          ? { ...v, unidades: Number(e.target.value) }
+                          : v
+                      ),
+                    }))
+                  }
+                />
+              </label>
+              <X
+                className="w-12 h-12 text-red-600 cursor-pointer"
+                onClick={() => deleteVariacion(variacion.id)}
+              />
+            </div>
+          ))}
+        <div className="space-y-2 flex justify-center items-center">
+          <button
+            className="btn btn-outline btn-neutral btn-md "
+            type="button"
+            onClick={addVariacion}
+          >
+            <Plus /> Agregar Variacion
+          </button>
         </div>
         <div className="my-2 space-y-2 flex justify-center items-center">
           <button

@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Eye, X } from "lucide-react";
 import { useAppContext } from "../../context/AppContext";
 
 type Props = {
@@ -15,17 +15,21 @@ const TableProductos = ({ venta }: Props) => {
     <table className="table table-zebra">
       <thead>
         <tr>
+          <th>Referencia</th>
           <th>Imagen</th>
-          <th>Codigo</th>
           <th>Nombre</th>
-          <th>Precio</th>
-          {!venta && <th>Eliminar</th>}
+          <th>Unidades</th>
+          <th>Precio Venta</th>
+          {!venta && <th>Acciones</th>}
         </tr>
       </thead>
       <tbody>
         {state.productos.length > 0 ? (
           state.productos.map((item, index) => (
             <tr key={index}>
+              <td>
+                <b>{item.referencia}</b>
+              </td>
               <td>
                 <img
                   src={item.imagen}
@@ -35,15 +39,19 @@ const TableProductos = ({ venta }: Props) => {
                   className="w-20 h-20 object-cover"
                 />
               </td>
-              <td>{item.referencia}</td>
+
               <td>{item.nombre}</td>
+              <td>{item.unidades}</td>
               <td>$ {item.precioVenta}</td>
               {!venta && (
                 <td>
-                  <X
-                    onClick={() => deleteProducto(item.id)}
-                    className="cursor-pointer text-red-500"
-                  />
+                  <div className="flex gap-2">
+                    <Eye className="cursor-pointer text-blue-500" />
+                    <X
+                      onClick={() => deleteProducto(item.id)}
+                      className="cursor-pointer text-red-500"
+                    />
+                  </div>
                 </td>
               )}
             </tr>

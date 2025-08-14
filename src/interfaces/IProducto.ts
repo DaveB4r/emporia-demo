@@ -10,4 +10,12 @@ export interface IProducto {
   referencia: string;
   descripcion?: string;
   unidades?: number;
+  variaciones?: IVariacion[];
+}
+
+export interface IVariacion {
+  id: string;
+  nombre: string;
+  valor: string;
+  unidades: number;
 }
