@@ -10,7 +10,7 @@ const Facturar = () => {
   return (
     <div className="flex flex-col md:flex-row">
       <div className="shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300 min-h-32 w-full">
-        <GeneralForm productos={productos} setProductos={setProductos} />
+        <GeneralForm />
       </div>
       <div className="tabs tabs-box w-full shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300">
         <input

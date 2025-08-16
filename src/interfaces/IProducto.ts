@@ -10,6 +10,7 @@ export interface IProducto {
   referencia: string;
   descripcion?: string;
   unidades?: number;
+  unidadesFacturar?: number; 
   variaciones?: IVariacion[];
 }
 

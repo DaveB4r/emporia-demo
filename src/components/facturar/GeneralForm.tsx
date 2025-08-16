@@ -1,39 +1,46 @@
 import type { IProducto } from "../../interfaces/IProducto";
-import {
-  useEffect,
-  useState,
-  type Dispatch,
-  type FormEvent,
-  type SetStateAction,
-} from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import ToastMessage from "../resources/ToastMessage";
-import { formatWithSeparator } from "../../utils/formatValue";
+import { useAppContext } from "../../context/AppContext";
+import type { IOption } from "../../interfaces/IOption";
+import Select from "react-select";
+import TableProductosFacturar from "./TableProductosFacturar";
 
-type Props = {
-  productos: IProducto[];
-  setProductos: Dispatch<SetStateAction<IProducto[]>>;
-};
-
-const GeneralForm = ({ productos, setProductos }: Props) => {
-  let id = Math.random().toString(36).substring(2, 10);
+const GeneralForm = () => {
+  const initialOption: IOption = {
+    value: "",
+    label: "",
+  };
+  const { state } = useAppContext();
+  const [productosFacturar, setProductosFacturar] = useState<IProducto[]>([]);
+  const [errors, setErrors] = useState({
+    productoSelected: "",
+    unidades: "",
+  });
+  const [productoSelected, setProductoSelected] = useState("");
+  const [selectedOption, setSelectedOption] = useState<IOption>(initialOption);
+  const [unidades, setUnidades] = useState(0);
+  const [options, setOptions] = useState<IOption[]>([initialOption]);
   const [toastInfo, setToastInfo] = useState({
     show: false,
     message: "",
     type: "",
   });
-  const [formInputs, setFormInputs] = useState<IProducto>({
-    id: id,
-    nombre: "",
-    referencia: "",
-    unidades: 0,
-    precioVenta: "",
-  });
-  const [errors, setErrors] = useState({
-    referencia: "",
-    unidades: "",
-    precioVenta: "",
-    nombre: "",
-  });
+
+  useEffect(() => {
+    setOptions([initialOption]);
+    if (options.length === 1) {
+      state.productos.map((producto) =>
+        setOptions((prev) => [
+          ...prev,
+          {
+            value: producto.id,
+            label: `${producto.referencia} ${producto.nombre} $${producto.precioVenta}`,
+          },
+        ])
+      );
+    }
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,41 +55,47 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setErrors({ referencia: "", unidades: "", precioVenta: "", nombre: "" });
-    if (!formInputs.referencia) {
-      setErrors((prev) => ({
-        ...prev,
-        codigo: "Por favor indique el codigo del producto",
-      }));
-      return false;
-    } else if (formInputs.unidades === 0) {
-      setErrors((prev) => ({
-        ...prev,
-        unidades: "Las unidades deben ser mayor a 0",
-      }));
-      return false;
-    } else if (!formInputs.precioVenta) {
-      setErrors((prev) => ({
-        ...prev,
-        precio: "Por favor indique el precio.",
-      }));
-      return false;
-    } else if (!formInputs.nombre) {
-      setErrors((prev) => ({
-        ...prev,
-        descripcion: "Por favor indique una descripcion.",
-      }));
-      return false;
-    }
-    id = Math.random().toString(36).substring(2, 10);
-    setProductos((prev) => [...prev, formInputs]);
-    setFormInputs({
-      id: id,
-      referencia: "",
-      unidades: 0,
-      precioVenta: "",
-      nombre: "",
+    setErrors({
+      productoSelected: "",
+      unidades: "",
     });
+    if (!productoSelected) {
+      setErrors((errors) => ({
+        ...errors,
+        productoSelected: "Porfavor seleccione un producto!",
+      }));
+      return;
+    }
+    if (unidades === 0) {
+      setErrors((errors) => ({
+        ...errors,
+        unidades: "Seleccione al menos una unidad!",
+      }));
+      return;
+    }
+    let exists = false;
+    productosFacturar.map((productoFacturar) => {
+      if (
+        productoFacturar.id === productoSelected &&
+        productoFacturar.unidadesFacturar
+      ) {
+        productoFacturar.unidadesFacturar += unidades;
+        exists = true;
+      }
+    });
+    if (!exists) {
+      state.productos.filter((producto) => {
+        if (producto.id === productoSelected) {
+          setProductosFacturar((prev) => [
+            ...prev,
+            { ...producto, unidadesFacturar: unidades },
+          ]);
+        }
+      });
+    }
+    setSelectedOption(initialOption);
+    setUnidades(0);
+    setProductoSelected("");
     setToastInfo({
       show: true,
       message: "Producto Guardado Satisfactoriamente",
@@ -101,20 +114,25 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
         </legend>
         <div className="flex gap-2">
           <div className="form-control flex flex-col">
-            <label htmlFor="codigo" className="label text-black">
-              Codigo Producto
+            <label htmlFor="producto" className="label text-black">
+              Seleccionar Producto
             </label>
-            <input
-              type="text"
-              id="codigo"
-              className={`input ${errors.referencia && "input-error"}`}
-              placeholder="1234"
-              value={formInputs.referencia}
-              onChange={(e) =>
-                setFormInputs((prev) => ({ ...prev, codigo: e.target.value }))
-              }
+            <Select
+              options={options}
+              className={`w-96 ${errors.productoSelected && "border border-red-700"}`}
+              id="producto"
+              value={selectedOption}
+              onChange={(value) => {
+                setSelectedOption({
+                  value: value?.value as string,
+                  label: value?.label as string,
+                });
+                setProductoSelected(value?.value as string);
+              }}
             />
-            <small className="text-sm text-red-700">{errors.referencia}</small>
+            <small className="text-xs text-red-700">
+              {errors.productoSelected}
+            </small>
           </div>
           <div className="form-control flex flex-col">
             <label htmlFor="unidades" className="label text-black">
@@ -123,57 +141,15 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
             <input
               type="number"
               id="unidades"
-              className={`input ${errors.unidades && "input-error"}`}
+              className={`w-16 input ${errors.unidades && "input-error"}`}
               placeholder="2"
-              value={formInputs.unidades}
-              onChange={(e) =>
-                setFormInputs((prev) => ({
-                  ...prev,
-                  unidades: Number(e.target.value),
-                }))
-              }
+              value={unidades}
+              onChange={(e) => setUnidades(Number(e.target.value))}
             />
-            <small className="text-sm text-red-700">{errors.unidades}</small>
+            <small className="text-xs text-red-700">
+              {errors.unidades}
+            </small>
           </div>
-          <div className="form-control flex flex-col">
-            <label htmlFor="precio" className="label text-black">
-              Precio
-            </label>
-            <input
-              type="text"
-              id="precio"
-              className={`input ${errors.precioVenta && "input-error"}`}
-              placeholder="50.000"
-              value={formInputs.precioVenta}
-              onChange={(e) =>
-                setFormInputs((prev) => ({
-                  ...prev,
-                  precio: formatWithSeparator(e.target.value),
-                }))
-              }
-            />
-            <small className="text-sm text-red-700">{errors.precioVenta}</small>
-          </div>
-        </div>
-        <div className="form-control flex flex-col">
-          <label htmlFor="nombre" className="text-black">
-            Nombre producto
-          </label>
-          <textarea
-            id="nombre"
-            className={`textarea h-24 w-full ${
-              errors.nombre && "textarea-error"
-            }`}
-            placeholder="Nombre"
-            value={formInputs.descripcion}
-            onChange={(e) =>
-              setFormInputs((prev) => ({
-                ...prev,
-                descripcion: e.target.value,
-              }))
-            }
-          />
-          <small className="text-sm text-red-700">{errors.nombre}</small>
         </div>
         <button
           type="submit"
@@ -188,7 +164,10 @@ const GeneralForm = ({ productos, setProductos }: Props) => {
             Productos agregados
           </h3>
         </div>
-        {/* <TableProductos /> */}
+        <TableProductosFacturar
+          productosFacturar={productosFacturar}
+          setProductosFacturar={setProductosFacturar}
+        />
       </div>
     </form>
   );

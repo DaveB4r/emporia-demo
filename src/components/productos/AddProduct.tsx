@@ -246,6 +246,7 @@ const AddProduct = () => {
                   precioEntrada: formatWithSeparator(e.target.value),
                 }))
               }
+              autoComplete="off"
             />
             {errors.precioEntrada && (
               <small className="text-xs text-red-700">
@@ -266,6 +267,7 @@ const AddProduct = () => {
                   precioVenta: formatWithSeparator(e.target.value),
                 }))
               }
+              autoComplete="off"
             />
             {errors.precioVenta && (
               <small className="text-xs text-red-700">
@@ -289,6 +291,7 @@ const AddProduct = () => {
                   linea: e.target.value,
                 }))
               }
+              autoComplete="off"
             />
             {errors.linea && (
               <small className="text-xs text-red-700">{errors.linea}</small>
@@ -307,6 +310,7 @@ const AddProduct = () => {
                   categoria: e.target.value,
                 }))
               }
+              autoComplete="off"
             />
             {errors.categoria && (
               <small className="text-xs text-red-700">{errors.categoria}</small>
@@ -327,6 +331,7 @@ const AddProduct = () => {
                   subCategoria: e.target.value,
                 }))
               }
+              autoComplete="off"
             />
           </label>
         </div>
@@ -345,6 +350,7 @@ const AddProduct = () => {
                   nombre: e.target.value,
                 }))
               }
+              autoComplete="off"
             />
             {errors.nombre && (
               <small className="text-xs text-red-700">{errors.nombre}</small>
@@ -363,6 +369,7 @@ const AddProduct = () => {
                   referencia: e.target.value,
                 }))
               }
+              autoComplete="off"
             />
             {errors.referencia && (
               <small className="text-xs text-red-700">
@@ -405,6 +412,7 @@ const AddProduct = () => {
                   descripcion: e.target.value,
                 }))
               }
+              autoComplete="off"
             />
           </label>
         </div>
