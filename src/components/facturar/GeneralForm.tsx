@@ -1,18 +1,22 @@
 import type { IProducto } from "../../interfaces/IProducto";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type Dispatch, type FormEvent, type SetStateAction } from "react";
 import ToastMessage from "../resources/ToastMessage";
 import { useAppContext } from "../../context/AppContext";
 import type { IOption } from "../../interfaces/IOption";
 import Select from "react-select";
 import TableProductosFacturar from "./TableProductosFacturar";
 
-const GeneralForm = () => {
+type Props = {
+  productosFacturar: IProducto[];
+  setProductosFacturar: Dispatch<SetStateAction<IProducto[]>>;
+}
+
+const GeneralForm = ({productosFacturar, setProductosFacturar}:Props) => {
   const initialOption: IOption = {
     value: "",
     label: "",
   };
   const { state } = useAppContext();
-  const [productosFacturar, setProductosFacturar] = useState<IProducto[]>([]);
   const [errors, setErrors] = useState({
     productoSelected: "",
     unidades: "",

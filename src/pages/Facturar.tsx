@@ -5,12 +5,15 @@ import TabContado from "../components/facturar/contado/TabContado";
 import TabCredito from "../components/facturar/credito/TabCredito";
 
 const Facturar = () => {
-  const [productos, setProductos] = useState<IProducto[]>([]);
+  const [productosFacturar, setProductosFacturar] = useState<IProducto[]>([]);
 
   return (
     <div className="flex flex-col md:flex-row">
       <div className="shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300 min-h-32 w-full">
-        <GeneralForm />
+        <GeneralForm
+          productosFacturar={productosFacturar}
+          setProductosFacturar={setProductosFacturar}
+        />
       </div>
       <div className="tabs tabs-box w-full shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300">
         <input
@@ -21,7 +24,11 @@ const Facturar = () => {
           defaultChecked
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          <TabContado productos={productos} setProductos={setProductos} type="contado"/>
+          <TabContado
+            productos={productosFacturar}
+            setProductos={setProductosFacturar}
+            type="contado"
+          />
         </div>
         <input
           type="radio"
@@ -30,7 +37,10 @@ const Facturar = () => {
           aria-label="Credito"
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          <TabCredito productos={productos} setProductos={setProductos} />
+          <TabCredito
+            productos={productosFacturar}
+            setProductos={setProductosFacturar}
+          />
         </div>
         <input
           type="radio"
@@ -39,7 +49,11 @@ const Facturar = () => {
           aria-label="Separado"
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          <TabContado productos={productos} setProductos={setProductos} type="separado"/>
+          <TabContado
+            productos={productosFacturar}
+            setProductos={setProductosFacturar}
+            type="separado"
+          />
         </div>
       </div>
     </div>

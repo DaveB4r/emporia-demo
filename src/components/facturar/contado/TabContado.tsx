@@ -41,7 +41,7 @@ const TabContado = ({ productos, setProductos, type }: Props) => {
       productos.map((producto) => {
         subTotal +=
           Number(String(producto.precioVenta).replaceAll(".", "")) *
-          Number(producto.unidades);
+          Number(producto.unidadesFacturar);
       });
     }
     const newSubtotal = Math.ceil(subTotal / 1.19);
