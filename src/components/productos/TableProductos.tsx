@@ -11,15 +11,23 @@ import {
 } from "@tanstack/react-table";
 import type { IProducto } from "../../interfaces/IProducto";
 import { Eye, X } from "lucide-react";
+import ModalProducto from "./ModalProducto";
 
 const TableProductos = () => {
   const { state, dispatch } = useAppContext();
 
+  const [id] = useState("modal_producto");
+  const [productoSelected, setProductoSelected] = useState<IProducto>();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
   const deleteProducto = (id: string) => {
     dispatch({ type: "DELETE_PRODUCT", productId: id });
+  };
+
+  const selectProducto = (producto: IProducto) => {
+    setProductoSelected(producto);
+    document.getElementById(id).showModal();
   };
 
   const columnHelper = createColumnHelper<IProducto>();
@@ -55,7 +63,10 @@ const TableProductos = () => {
       header: "Acciones",
       cell: (info) => (
         <div className="flex gap-2">
-          <Eye className="cursor-pointer text-blue-500" />
+          <Eye
+            className="cursor-pointer text-blue-500"
+            onClick={() => selectProducto(info.row.original)}
+          />
           <X
             onClick={() => deleteProducto(info.row.original.id)}
             className="cursor-pointer text-red-500"
@@ -153,6 +164,7 @@ const TableProductos = () => {
           )}
         </tbody>
       </table>
+      <ModalProducto id={id} producto={productoSelected as IProducto} />
     </div>
   );
 };

@@ -6,7 +6,6 @@ import type { IClienteCredito } from "../../interfaces/IClienteCredito";
 
 type Props = {
   id: string;
-  productos: IProducto[];
   datosCliente?: IClienteContado;
   datosCredito?: IClienteCredito;
   subtotal: number;
@@ -22,7 +21,6 @@ type Props = {
 
 const ModalVenta = ({
   id,
-  productos,
   datosCliente,
   datosCredito,
   subtotal,

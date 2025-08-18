@@ -149,7 +149,6 @@ const TabContado = ({ productos, setProductos, type }: Props) => {
       </button>
       <ModalVenta
         id={id}
-        productos={productos}
         datosCliente={datosCliente}
         subtotal={subtotal}
         iva={iva}

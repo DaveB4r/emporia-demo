@@ -99,7 +99,6 @@ const TabCredito = ({ productos, setProductos }: Props) => {
       </button>
       <ModalVenta
         id="modal_venta_credito"
-        productos={productos}
         datosCredito={datosCredito}
         subtotal={subtotal}
         iva={iva}
