@@ -1,4 +1,14 @@
-import { Menu, ReceiptText, ShoppingCart, X } from "lucide-react";
+import {
+  ArrowLeftRight,
+  Bot,
+  CircleDollarSign,
+  Menu,
+  ReceiptText,
+  ShoppingCart,
+  Users,
+  Wallet,
+  X,
+} from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -102,12 +112,116 @@ const Sidebar = () => {
               <span className="sr-only">Productos</span>
             </Link>
           </li>
-          <li
-            className={`rounded-xl hover:bg-zinc-800 hover:shadow-md transition-all duration-200 ease-in-out group ${
-              isSidebarOpen ? "justify-start" : "justify-center"
-            } ${location.pathname === "/inventario" && "bg-zinc-800"}`}
-          >
-          </li>
+          <div className="indicator flex flex-col gap-2 border border-gray-950 mt-4 rounded-2xl">
+            <span className="indicator-item badge badge-info text-white font-semibold">
+              Proximamente
+            </span>
+            <li
+              className={`w-full mt-4 indicator flex items-center px-4 py-3 text-lg gap-1 rounded-xl transition-all duration-200 ease-in-out group opacity-70  ${
+                isSidebarOpen ? "justify-start" : "justify-center"
+              }`}
+            >
+              <CircleDollarSign
+                size={isSidebarOpen ? 24 : 32}
+                className={`mr-0 ${
+                  isSidebarOpen ? "md:mr-3" : "md:mr-0"
+                } transition-all duration-200`}
+              />
+              <span
+                className={`transition-all duration-200 ${
+                  isSidebarOpen
+                    ? "opacity-100 w-auto"
+                    : "opacity-0 w-0 overflow-hidden"
+                } md:opacity-100 md:w-auto`}
+              >
+                Abonos
+              </span>
+            </li>
+            <li
+              className={`w-full mt-4 indicator flex items-center px-4 py-3 text-lg gap-1 rounded-xl transition-all duration-200 ease-in-out group opacity-70  ${
+                isSidebarOpen ? "justify-start" : "justify-center"
+              }`}
+            >
+              <Users
+                size={isSidebarOpen ? 24 : 32}
+                className={`mr-0 ${
+                  isSidebarOpen ? "md:mr-3" : "md:mr-0"
+                } transition-all duration-200`}
+              />
+              <span
+                className={`transition-all duration-200 ${
+                  isSidebarOpen
+                    ? "opacity-100 w-auto"
+                    : "opacity-0 w-0 overflow-hidden"
+                } md:opacity-100 md:w-auto`}
+              >
+                Crear Cliente
+              </span>
+            </li>
+            <li
+              className={`w-full mt-4 indicator flex items-center px-4 py-3 text-lg gap-1 rounded-xl transition-all duration-200 ease-in-out group opacity-70  ${
+                isSidebarOpen ? "justify-start" : "justify-center"
+              }`}
+            >
+              <Wallet
+                size={isSidebarOpen ? 24 : 32}
+                className={`mr-0 ${
+                  isSidebarOpen ? "md:mr-3" : "md:mr-0"
+                } transition-all duration-200`}
+              />
+              <span
+                className={`transition-all duration-200 ${
+                  isSidebarOpen
+                    ? "opacity-100 w-auto"
+                    : "opacity-0 w-0 overflow-hidden"
+                } md:opacity-100 md:w-auto`}
+              >
+                Cartera
+              </span>
+            </li>
+            <li
+              className={`w-full mt-4 indicator flex items-center px-4 py-3 text-lg gap-1 rounded-xl transition-all duration-200 ease-in-out group opacity-70  ${
+                isSidebarOpen ? "justify-start" : "justify-center"
+              }`}
+            >
+              <Bot
+                size={isSidebarOpen ? 24 : 32}
+                className={`mr-0 ${
+                  isSidebarOpen ? "md:mr-3" : "md:mr-0"
+                } transition-all duration-200`}
+              />
+              <span
+                className={`transition-all duration-200 ${
+                  isSidebarOpen
+                    ? "opacity-100 w-auto"
+                    : "opacity-0 w-0 overflow-hidden"
+                } md:opacity-100 md:w-auto`}
+              >
+                Automatizacion
+              </span>
+            </li>
+            <li
+              className={`w-full mt-4 indicator flex items-center px-4 py-3 text-lg gap-1 rounded-xl transition-all duration-200 ease-in-out group opacity-70  ${
+                isSidebarOpen ? "justify-start" : "justify-center"
+              }`}
+            >
+              <ArrowLeftRight
+                size={isSidebarOpen ? 24 : 32}
+                className={`mr-0 ${
+                  isSidebarOpen ? "md:mr-3" : "md:mr-0"
+                } transition-all duration-200`}
+              />
+              <span
+                className={`transition-all duration-200 ${
+                  isSidebarOpen
+                    ? "opacity-100 w-auto"
+                    : "opacity-0 w-0 overflow-hidden"
+                } md:opacity-100 md:w-auto`}
+              >
+                Traslados
+              </span>
+            </li>
+          </div>
         </ul>
       </nav>
     </aside>
