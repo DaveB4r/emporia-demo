@@ -23,8 +23,8 @@ const Sidebar = () => {
   return (
     <aside
       className={`fixed inset-y-0 left-0 z-40 flex-shrink-0 bg-zinc-700 text-white shadow-lg transition-all duration-300 ease-in-out flex flex-col translate-x-0 ${
-        isSidebarOpen ? "w-64" : "w-20"
-      } md:w-64`}
+        isSidebarOpen ? "w-68" : "w-20"
+      } md:w-68`}
     >
       <div
         className={`flex items-center p-4 h-16 ${
