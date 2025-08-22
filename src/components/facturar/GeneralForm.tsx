@@ -1,5 +1,11 @@
 import type { IProducto } from "../../interfaces/IProducto";
-import { useEffect, useState, type Dispatch, type FormEvent, type SetStateAction } from "react";
+import {
+  useEffect,
+  useState,
+  type Dispatch,
+  type FormEvent,
+  type SetStateAction,
+} from "react";
 import ToastMessage from "../resources/ToastMessage";
 import { useAppContext } from "../../context/AppContext";
 import type { IOption } from "../../interfaces/IOption";
@@ -9,9 +15,9 @@ import TableProductosFacturar from "./TableProductosFacturar";
 type Props = {
   productosFacturar: IProducto[];
   setProductosFacturar: Dispatch<SetStateAction<IProducto[]>>;
-}
+};
 
-const GeneralForm = ({productosFacturar, setProductosFacturar}:Props) => {
+const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
   const initialOption: IOption = {
     value: "",
     label: "",
@@ -108,7 +114,10 @@ const GeneralForm = ({productosFacturar, setProductosFacturar}:Props) => {
   };
 
   return (
-    <form className="flex flex-col bg-base-200 py-4" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col bg-base-200 py-4"
+      onSubmit={handleSubmit}
+    >
       {toastInfo.show && (
         <ToastMessage type={toastInfo.type} message={toastInfo.message} />
       )}
@@ -118,13 +127,15 @@ const GeneralForm = ({productosFacturar, setProductosFacturar}:Props) => {
         </legend>
         <div className="flex gap-2">
           <div className="form-control flex flex-col">
-            <label htmlFor="producto" className="label text-black">
+            <label htmlFor="select_producto" className="label text-black">
               Seleccionar Producto
             </label>
             <Select
               options={options}
-              className={`w-96 ${errors.productoSelected && "border border-red-700"}`}
-              id="producto"
+              className={`w-96 ${
+                errors.productoSelected && "border border-red-700"
+              }`}
+              id="select_producto"
               value={selectedOption}
               onChange={(value) => {
                 setSelectedOption({
@@ -150,12 +161,11 @@ const GeneralForm = ({productosFacturar, setProductosFacturar}:Props) => {
               value={unidades}
               onChange={(e) => setUnidades(Number(e.target.value))}
             />
-            <small className="text-xs text-red-700">
-              {errors.unidades}
-            </small>
+            <small className="text-xs text-red-700">{errors.unidades}</small>
           </div>
         </div>
         <button
+          id="agrega_producto"
           type="submit"
           className="btn btn-neutral btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
         >

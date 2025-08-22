@@ -53,6 +53,7 @@ const Sidebar = () => {
       <nav className="flex-1 flex flex-col justify-between py-4 overflow-y-auto">
         <ul className="space-y-2 px-2">
           <li
+            id="li_facturar"
             className={`rounded-xl hover:bg-zinc-800 hover:shadow-md transition-all duration-200 ease-in-out group ${
               isSidebarOpen ? "justify-start" : "justify-center"
             } ${location.pathname === "/facturar" && "bg-zinc-800"}`}
@@ -83,6 +84,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li
+            id="li_productos"
             className={`rounded-xl hover:bg-zinc-800 hover:shadow-md transition-all duration-200 ease-in-out group ${
               isSidebarOpen ? "justify-start" : "justify-center"
             } ${location.pathname === "/productos" && "bg-zinc-800"}`}

@@ -6,24 +6,30 @@ import {
   type ReactNode,
 } from "react";
 import type { IProducto } from "../interfaces/IProducto";
+import type { ITours } from "../interfaces/ITours";
 
 type ActionType =
   | { type: "ADD_PRODUCT"; producto: IProducto }
   | { type: "DELETE_PRODUCT"; productId: string }
   | { type: "LOGIN"; userId: string }
   | { type: "LOGOUT" }
-  | { type: "LOGIN_SECRET"; userSecret: string };
+  | { type: "LOGIN_SECRET"; userSecret: string }
+  | { type: "FINISH_TOUR"; tours: ITours };
 
 type State = {
   productos: IProducto[];
   userId: string;
   userSecret: string;
+  tours: ITours;
 };
 
 const initialState: State = {
   productos: [],
   userId: localStorage.getItem("userId") as string,
   userSecret: localStorage.getItem("userSecret") as string,
+  tours: JSON.parse(localStorage.getItem("tours") as string)
+    ? { ...JSON.parse(localStorage.getItem("tours") as string) }
+    : { homeTour: true, productosTour: true, facturarTour: true },
 };
 
 const reducer = (state: State, action: ActionType): State => {
@@ -50,6 +56,13 @@ const reducer = (state: State, action: ActionType): State => {
       return {
         ...state,
         userSecret: localStorage.getItem("userSecret") as string,
+      };
+    case "FINISH_TOUR":
+      localStorage.removeItem("tours");
+      localStorage.setItem("tours", JSON.stringify(action.tours));
+      return {
+        ...state,
+        tours: JSON.parse(localStorage.getItem("tours") as string),
       };
     default:
       return state;

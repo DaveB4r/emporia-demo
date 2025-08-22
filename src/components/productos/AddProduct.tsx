@@ -191,7 +191,10 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div
+      className="flex flex-col justify-center items-center"
+      id="form_productos"
+    >
       {toastInfo.show && (
         <ToastMessage type={toastInfo.type} message={toastInfo.message} />
       )}
@@ -530,6 +533,7 @@ const AddProduct = () => {
         </div>
         <div className="my-2 space-y-2 flex justify-center items-center">
           <button
+            id="btn_guardar_producto"
             className="btn btn-neutral btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
             type="submit"
           >

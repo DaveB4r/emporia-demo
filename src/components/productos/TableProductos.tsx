@@ -92,7 +92,7 @@ const TableProductos = () => {
   });
 
   return (
-    <div className="p-4">
+    <div className="p-4" id="table_productos">
       {/* Search bar */}
       <div className="mb-4 float-end">
         <label className="input">
