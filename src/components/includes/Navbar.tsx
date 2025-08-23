@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const logout = () => {
     dispatch({ type: "LOGOUT" });
-    navigate("/login");
+    setTimeout(() => navigate("/login"), 1500);
   };
   return (
     <header className="border-none bg-gradient-to-r from-slate-100 to-gray-200 text-white px-6 py-4 shadow-md">

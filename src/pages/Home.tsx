@@ -22,8 +22,12 @@ const Home = () => {
     },
   ];
   return (
-    <div>
-      <Tour tourSteps={tourSteps} path="home"/>
+    <div className="flex flex-col justify-center items-center">
+      <Tour tourSteps={tourSteps} path="home" />
+      <h1 className="text-4xl mb-2 font-black capitalize">Aprende a utilizar nuestra demo!</h1>
+      <video width={"80%"} controls>
+        <source src="/videos/tutorial.mp4" type="video/mp4" />
+      </video>
     </div>
   );
 };

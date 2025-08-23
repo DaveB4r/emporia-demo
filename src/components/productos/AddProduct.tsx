@@ -41,6 +41,17 @@ const AddProduct = () => {
     return () => clearTimeout(timer);
   }, [toastInfo]);
 
+  useEffect(() => {
+    let totalUnidades = 0;
+    data.variaciones?.map((variacion) => {
+      totalUnidades += variacion.unidades;
+    });
+    setData((prev) => ({
+      ...prev,
+      unidades: totalUnidades,
+    }));
+  }, [data.variaciones]);
+
   const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target!.files![0];
     if (!file) return;
@@ -159,7 +170,6 @@ const AddProduct = () => {
       });
     }
     if (variacionErrors) return;
-    console.log(variacionErrors);
     dispatch({ type: "ADD_PRODUCT", producto: data });
     setData(initialProducto);
     setToastInfo({
@@ -179,6 +189,8 @@ const AddProduct = () => {
     };
     setData((prev) => ({
       ...prev,
+      unidades:
+        prev.variaciones && prev.variaciones?.length > 0 ? prev.unidades : 0,
       variaciones: [...(prev.variaciones || []), newVariacion],
     }));
   };
@@ -393,6 +405,7 @@ const AddProduct = () => {
                   unidades: Number(e.target.value),
                 }))
               }
+              readOnly={data.variaciones && data.variaciones.length > 0}
             />
             {errors.unidades === -1 && (
               <small className="text-xs text-red-700">
@@ -476,7 +489,7 @@ const AddProduct = () => {
                     min={1}
                     id={`unidadesVariacion${variacion.id}`}
                     value={variacion.unidades}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setData((prev) => ({
                         ...prev,
                         variaciones: prev.variaciones?.map((v) =>
@@ -484,8 +497,8 @@ const AddProduct = () => {
                             ? { ...v, unidades: Number(e.target.value) }
                             : v
                         ),
-                      }))
-                    }
+                      }));
+                    }}
                   />
                 </label>
                 <X
