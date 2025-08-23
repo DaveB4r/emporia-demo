@@ -9,15 +9,20 @@ import {
 import ToastMessage from "../resources/ToastMessage";
 import { useAppContext } from "../../context/AppContext";
 import type { IOption } from "../../interfaces/IOption";
-import Select from "react-select";
+import Select, { type SingleValue } from "react-select";
 import TableProductosFacturar from "./TableProductosFacturar";
 
 type Props = {
   productosFacturar: IProducto[];
   setProductosFacturar: Dispatch<SetStateAction<IProducto[]>>;
+  setRecalculate: Dispatch<SetStateAction<boolean>>;
 };
 
-const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
+const GeneralForm = ({
+  productosFacturar,
+  setProductosFacturar,
+  setRecalculate,
+}: Props) => {
   const initialOption: IOption = {
     value: "",
     label: "",
@@ -30,6 +35,7 @@ const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
   const [productoSelected, setProductoSelected] = useState("");
   const [selectedOption, setSelectedOption] = useState<IOption>(initialOption);
   const [unidades, setUnidades] = useState(0);
+  const [maxUnidades, setMaxUnidades] = useState(0);
   const [options, setOptions] = useState<IOption[]>([initialOption]);
   const [toastInfo, setToastInfo] = useState({
     show: false,
@@ -44,8 +50,8 @@ const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
         setOptions((prev) => [
           ...prev,
           {
-            value: producto.id,
-            label: `${producto.referencia} ${producto.nombre} $${producto.precioVenta}`,
+            value: `${producto.id}:${producto.unidades}`,
+            label: `${producto.referencia} ${producto.nombre} $${producto.precioVenta} ( ${producto.unidades} Unidades disponibles )`,
           },
         ])
       );
@@ -63,6 +69,34 @@ const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
     return () => clearTimeout(timer);
   }, [toastInfo]);
 
+  const handleSelection = (value: SingleValue<IOption>) => {
+    setSelectedOption({
+      value: value?.value as string,
+      label: value?.label as string,
+    });
+    const id = String(value?.value).split(":")[0];
+    const productoUnidades = Number(String(value?.value).split(":")[1]);
+    let quantityExceded = false;
+    productosFacturar.filter((productoFactura) => {
+      if (
+        productoFactura.id === id &&
+        Number(productoFactura.unidadesFacturar) >= productoUnidades
+      ) {
+        quantityExceded = true;
+      }
+    });
+    if (quantityExceded) {
+      setErrors((prev) => ({
+        ...prev,
+        unidades: "Ya selecciono todas las unidades disponibles",
+      }));
+      setMaxUnidades(0);
+      return;
+    }
+    setProductoSelected(id);
+    setMaxUnidades(productoUnidades);
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setErrors({
@@ -72,7 +106,7 @@ const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
     if (!productoSelected) {
       setErrors((errors) => ({
         ...errors,
-        productoSelected: "Porfavor seleccione un producto!",
+        productoSelected: "Por favor seleccione un producto!",
       }));
       return;
     }
@@ -103,6 +137,7 @@ const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
         }
       });
     }
+    setRecalculate((recalculate) => !recalculate);
     setSelectedOption(initialOption);
     setUnidades(0);
     setProductoSelected("");
@@ -114,10 +149,7 @@ const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
   };
 
   return (
-    <form
-      className="flex flex-col bg-base-200 py-4"
-      onSubmit={handleSubmit}
-    >
+    <form className="flex flex-col bg-base-200 py-4" onSubmit={handleSubmit}>
       {toastInfo.show && (
         <ToastMessage type={toastInfo.type} message={toastInfo.message} />
       )}
@@ -137,13 +169,7 @@ const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
               }`}
               id="select_producto"
               value={selectedOption}
-              onChange={(value) => {
-                setSelectedOption({
-                  value: value?.value as string,
-                  label: value?.label as string,
-                });
-                setProductoSelected(value?.value as string);
-              }}
+              onChange={handleSelection}
             />
             <small className="text-xs text-red-700">
               {errors.productoSelected}
@@ -157,7 +183,7 @@ const GeneralForm = ({ productosFacturar, setProductosFacturar }: Props) => {
               type="number"
               id="unidades"
               className={`w-16 input ${errors.unidades && "input-error"}`}
-              placeholder="2"
+              max={maxUnidades}
               value={unidades}
               onChange={(e) => setUnidades(Number(e.target.value))}
             />

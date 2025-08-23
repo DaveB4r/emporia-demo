@@ -48,12 +48,15 @@ const Login = () => {
       {!loading ? (
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Prueba nuestra demo!</h1>
-            <p className="py-6">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Temporibus quisquam vel quasi nihil ipsum corrupti excepturi
-              deleniti amet accusantium facere neque voluptatum at quia,
-              officiis inventore hic necessitatibus libero laborum!
+            <h1 className="text-2xl md:text-5xl font-bold capitalize text-blue-950">
+              ¡Prueba nuestra demo!
+            </h1>
+            <p className="py-6 text-lg md:text-2xl font-semibold">
+              La gestión de tu negocio, simplificada. <br />
+              Bienvenido a lo que estamos construyendo para ti.
+            </p>
+            <p className="text-lg md:text-2xl font-semibold text-blue-950">
+              <b className="text-xl md:text-3xl">Software ERP:</b> Facturación, Inventario, CRM, seguimiento de cartera, ventas a Crédito, Automatización sms, correos y llamadas… y mucho mas
             </p>
           </div>
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">

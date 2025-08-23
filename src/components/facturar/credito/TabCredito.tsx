@@ -78,7 +78,7 @@ const TabCredito = ({ productos, setProductos }: Props) => {
       setErrors((prev) => ({ ...prev, numCuotas: -1 }));
       return false;
     }
-    document.getElementById("modal_venta_credito").showModal();
+    (document.getElementById("modal_venta_credito") as HTMLFormElement).showModal();
   };
 
   return (

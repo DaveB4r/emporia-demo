@@ -8,6 +8,7 @@ import Tour from "../components/resources/Tour";
 
 const Facturar = () => {
   const [productosFacturar, setProductosFacturar] = useState<IProducto[]>([]);
+  const [recalculate, setRecalculate] = useState(false);
   const tourSteps: Step[] = [
     {
       content: <h2>Venderemos nuestros productos!</h2>,
@@ -55,9 +56,10 @@ const Facturar = () => {
 
   return (
     <div className="flex flex-col md:flex-row">
-      <Tour tourSteps={tourSteps} path="facturar"/>
+      <Tour tourSteps={tourSteps} path="facturar" />
       <div className="shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300 min-h-32 w-full">
         <GeneralForm
+          setRecalculate={setRecalculate}
           productosFacturar={productosFacturar}
           setProductosFacturar={setProductosFacturar}
         />
@@ -78,6 +80,7 @@ const Facturar = () => {
             productos={productosFacturar}
             setProductos={setProductosFacturar}
             type="contado"
+            recalculate={recalculate}
           />
         </div>
         <input
@@ -103,6 +106,7 @@ const Facturar = () => {
             productos={productosFacturar}
             setProductos={setProductosFacturar}
             type="separado"
+            recalculate={recalculate}
           />
         </div>
       </div>

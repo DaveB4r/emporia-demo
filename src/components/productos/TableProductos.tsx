@@ -27,7 +27,7 @@ const TableProductos = () => {
 
   const selectProducto = (producto: IProducto) => {
     setProductoSelected(producto);
-    document.getElementById(id).showModal();
+    (document.getElementById(id) as HTMLFormElement).showModal();
   };
 
   const columnHelper = createColumnHelper<IProducto>();

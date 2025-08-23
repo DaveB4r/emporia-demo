@@ -16,9 +16,10 @@ type Props = {
   productos: IProducto[];
   setProductos: Dispatch<SetStateAction<IProducto[]>>;
   type: "contado" | "separado";
+  recalculate: boolean;
 };
 
-const TabContado = ({ productos, setProductos, type }: Props) => {
+const TabContado = ({ productos, setProductos, type, recalculate }: Props) => {
   const initialCliente: IClienteContado = {
     cedula: "",
     verificacion: "",
@@ -47,7 +48,7 @@ const TabContado = ({ productos, setProductos, type }: Props) => {
     const newSubtotal = Math.ceil(subTotal / 1.19);
     setSubtotal(newSubtotal);
     setIva(subTotal - newSubtotal);
-  }, [productos]);
+  }, [productos, recalculate]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -106,7 +107,7 @@ const TabContado = ({ productos, setProductos, type }: Props) => {
       }));
       return false;
     }
-    document.getElementById(id).showModal();
+    (document.getElementById(id) as HTMLFormElement).showModal();
   };
 
   return (
