@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 type Props = {
   users: any[];
 };
@@ -36,6 +38,7 @@ const TableUsuarios = ({ users }: Props) => {
           )}
         </tbody>
       </table>
+      <Link to="/" className="mt-4 float-end btn btn-neutral">Volver</Link>
     </div>
   );
 };

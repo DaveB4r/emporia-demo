@@ -1,9 +1,10 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../components/includes/Navbar";
 import Sidebar from "../components/includes/Sidebar";
 import Footer from "../components/includes/Footer";
 import { useAppContext } from "../context/AppContext";
 import { useEffect } from "react";
+import { CircleQuestionMark } from "lucide-react";
 
 const MainLayout = () => {
   const { state } = useAppContext();
@@ -18,11 +19,16 @@ const MainLayout = () => {
   return (
     <div className="flex h-screen font-sans antialiased">
       <Sidebar />
-      <div className="flex flex-col flex-1 ml-20 md:ml-64">
+      <div className="flex flex-col flex-1 ml-20 md:ml-64 relative">
         <Navbar />
         <main className="flex-1 overflow-auto p-6">
           <Outlet />
         </main>
+        <div className="absolute bottom-5 right-5">
+          <Link to="/usuarios">
+            <CircleQuestionMark className="cursor-pointer hover:scale-105" />
+          </Link>
+        </div>
         <Footer />
       </div>
     </div>

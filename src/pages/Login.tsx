@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { useEffect, useState, type FormEvent } from "react";
 import type { IUser } from "../interfaces/IUser";
+import { CircleQuestionMark } from "lucide-react";
 
 const initialUser: IUser = {
   nombre: "",
@@ -14,6 +15,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [data, setData] = useState<IUser>(initialUser);
+  const [errors, setErrors] = useState<IUser>(initialUser);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -24,6 +26,29 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setErrors(initialUser);
+    if (!data.nombre) {
+      setErrors((prev) => ({
+        ...prev,
+        nombre: "Por favor indique su nombre completo!",
+      }));
+      return;
+    }
+    if(!data.correo) {
+      setErrors((prev) => ({
+        ...prev,
+        correo: "Por favor indique su correo!"
+      }));
+      return;
+    }
+    if(!data.celular) {
+      setErrors((prev) => ({
+        ...prev,
+        celular: "Por favor indique su numero de celular!"
+      }));
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await fetch("http://localhost:9900/insert-user", {
@@ -44,7 +69,7 @@ const Login = () => {
   };
 
   return (
-    <div className="hero bg-base-200 min-h-screen">
+    <div className="hero bg-base-200 min-h-screen relative">
       {!loading ? (
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="text-center lg:text-left">
@@ -56,7 +81,9 @@ const Login = () => {
               Bienvenido a lo que estamos construyendo para ti.
             </p>
             <p className="text-lg md:text-2xl font-semibold text-blue-950">
-              <b className="text-xl md:text-3xl">Software ERP:</b> Facturación, Inventario, CRM, seguimiento de cartera, ventas a Crédito, Automatización sms, correos y llamadas… y mucho mas
+              <b className="text-xl md:text-3xl">Software ERP:</b> Facturación,
+              Inventario, CRM, seguimiento de cartera, ventas a Crédito,
+              Automatización sms, correos y llamadas… y mucho mas
             </p>
           </div>
           <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -70,13 +97,16 @@ const Login = () => {
                   <input
                     id="nombre"
                     type="text"
-                    className="input"
+                    className={`input ${errors.nombre && "input-error"}`}
                     placeholder="Nombre Completo"
                     value={data?.nombre}
                     onChange={(e) =>
                       setData((data) => ({ ...data, nombre: e.target.value }))
                     }
                   />
+                  <small className="text-xs text-red-700">
+                    {errors.nombre}
+                  </small>
                   <label htmlFor="correo" className="label">
                     Correo
                   </label>
@@ -109,6 +139,9 @@ const Login = () => {
                 </fieldset>
               </form>
             </div>
+          </div>
+          <div className="absolute bottom-5 right-5">
+            <Link to="/usuarios"><CircleQuestionMark className="cursor-pointer hover:scale-105"/></Link>
           </div>
         </div>
       ) : (
