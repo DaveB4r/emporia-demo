@@ -149,22 +149,22 @@ const GeneralForm = ({
   };
 
   return (
-    <form className="flex flex-col bg-base-200 py-4" onSubmit={handleSubmit}>
+    <form className="flex flex-col bg-base-200 py-4 w-full" onSubmit={handleSubmit}>
       {toastInfo.show && (
         <ToastMessage type={toastInfo.type} message={toastInfo.message} />
       )}
       <fieldset className="fieldset border-base-300 rounded-box border p-4">
-        <legend className="fieldset-legend uppercase font-bold text-2xl text-center">
+        <legend className="fieldset-legend uppercase font-bold text-lg md:text-2xl text-center">
           facturar
         </legend>
-        <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
           <div className="form-control flex flex-col">
             <label htmlFor="select_producto" className="label text-black">
               Seleccionar Producto
             </label>
             <Select
               options={options}
-              className={`w-96 ${
+              className={`w-full md:w-96 ${
                 errors.productoSelected && "border border-red-700"
               }`}
               id="select_producto"
@@ -182,7 +182,7 @@ const GeneralForm = ({
             <input
               type="number"
               id="unidades"
-              className={`w-16 input ${errors.unidades && "input-error"}`}
+              className={`w-full md:w-16 input ${errors.unidades && "input-error"}`}
               max={maxUnidades}
               value={unidades}
               onChange={(e) => setUnidades(Number(e.target.value))}
@@ -200,7 +200,7 @@ const GeneralForm = ({
       </fieldset>
       <div className="over-flow-x-auto flex flex-col gap-2 bg-white border border-gray-300 rounded-lg mx-4">
         <div className="w-full border-b-2">
-          <h3 className="py-4 uppercase  text-center font-bold">
+          <h3 className="py-4 uppercase text-xs md:text-xl text-center font-bold">
             Productos agregados
           </h3>
         </div>

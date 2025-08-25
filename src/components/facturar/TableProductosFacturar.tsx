@@ -22,29 +22,29 @@ const TableProductosFacturar = ({
       <table className="table table-zebra">
         <thead>
           <tr>
-            <th>Referencia</th>
-            <th>Nombre</th>
-            <th>Imagen</th>
-            <th>Precio</th>
-            <th>Unidades</th>
-            <th>Eliminar</th>
+            <th className="text-xs md:text-sm">Ref</th>
+            <th className="text-xs md:text-sm">Nombre</th>
+            <th className="text-xs md:text-sm hidden md:table-cell">Imagen</th>
+            <th className="text-xs md:text-sm">Precio</th>
+            <th className="text-xs md:text-sm">Unidades</th>
+            <th className="text-xs md:text-sm">Eliminar</th>
           </tr>
         </thead>
         <tbody>
           {productosFacturar.map((producto) => (
             <tr key={producto.id}>
-              <td>{producto.referencia}</td>
-              <td>{producto.nombre}</td>
-              <td>
+              <td className="text-xs md:text-sm">{producto.referencia}</td>
+              <td className="text-xs md:text-sm">{producto.nombre}</td>
+              <td className="text-xs md:text-sm hidden md:table-cell">
                 <img
                   src={producto.imagen}
                   alt={producto.nombre}
                   className="w-20 h-20 object-cover"
                 />
               </td>
-              <td>{producto.precioVenta}</td>
-              <td>{producto.unidadesFacturar}</td>
-              <td>
+              <td className="text-xs md:text-sm">{producto.precioVenta}</td>
+              <td className="text-xs md:text-sm">{producto.unidadesFacturar}</td>
+              <td className="text-xs md:text-sm">
                 <X
                   className="w-8 h-8 text-red-600 cursor-pointer"
                   onClick={() => deleteProducto(producto.id)}

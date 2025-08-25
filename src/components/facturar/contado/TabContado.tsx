@@ -122,7 +122,7 @@ const TabContado = ({ productos, setProductos, type, recalculate }: Props) => {
         <div className="form-control my-2 w-full flex flex-col justify-center items-center">
           <label
             htmlFor="abono"
-            className="label text-black text-4xl uppercase font-bold mb-2"
+            className="label text-black text-xl md:text-4xl uppercase font-bold mb-2"
           >
             Abono
           </label>

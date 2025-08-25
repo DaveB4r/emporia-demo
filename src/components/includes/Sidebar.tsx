@@ -115,9 +115,11 @@ const Sidebar = () => {
             </Link>
           </li>
           <div className="indicator flex flex-col gap-2 border border-gray-950 mt-4 rounded-2xl">
-            <span className="indicator-item badge badge-info text-white font-semibold">
-              Proximamente
-            </span>
+            {isSidebarOpen && (
+              <span className="indicator-item badge badge-info text-white font-semibold">
+                Proximamente
+              </span>
+            )}
             <li
               className={`w-full mt-4 indicator flex items-center px-4 py-3 text-lg gap-1 rounded-xl transition-all duration-200 ease-in-out group opacity-70  ${
                 isSidebarOpen ? "justify-start" : "justify-center"

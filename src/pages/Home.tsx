@@ -24,8 +24,8 @@ const Home = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <Tour tourSteps={tourSteps} path="home" />
-      <h1 className="text-4xl mb-2 font-black capitalize">Aprende a utilizar nuestra demo!</h1>
-      <video width={"80%"} controls>
+      <h1 className="text-xl md:text-4xl mb-2 font-black capitalize text-center">Aprende a utilizar nuestra demo!</h1>
+      <video controls>
         <source src="/videos/tutorial.mp4" type="video/mp4" />
       </video>
     </div>

@@ -55,7 +55,7 @@ const Facturar = () => {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col md:flex-row max-w-[calc(100vw-100px)]">
       <Tour tourSteps={tourSteps} path="facturar" />
       <div className="shadow-[0px_4px_6px_0px_rgba(0,_0,_0,_0.1)] rounded-lg border border-gray-300 min-h-32 w-full">
         <GeneralForm

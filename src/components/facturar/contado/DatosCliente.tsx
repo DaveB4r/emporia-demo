@@ -11,10 +11,10 @@ const DatosCliente = ({ datosCliente, setDatosCliente, errors }: Props) => {
   return (
     <form className="flex flex-col py-4">
       <fieldset className="fieldset border-base-300 rounded-box border p-4">
-        <legend className="fieldset-legend uppercase font-bold text-2xl text-center">
+        <legend className="fieldset-legend uppercase font-bold text-lg md:text-2xl text-center">
           datos del cliente
         </legend>
-        <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
           <div className="form-control w-full flex flex-col">
             <label htmlFor="cedula" className="label text-black">
               Cedula
@@ -51,7 +51,7 @@ const DatosCliente = ({ datosCliente, setDatosCliente, errors }: Props) => {
             <small className="text-red-600 text-sm">{errors.verificacion}</small>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
           <div className="form-control w-full flex flex-col">
             <label htmlFor="nombre" className="label text-black">
               Nombre
@@ -88,7 +88,7 @@ const DatosCliente = ({ datosCliente, setDatosCliente, errors }: Props) => {
             <small className="text-red-600 text-sm">{errors.apellido}</small>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row gap-2">
           <div className="form-control w-full flex flex-col">
             <label htmlFor="correo" className="label text-black">
               Correo

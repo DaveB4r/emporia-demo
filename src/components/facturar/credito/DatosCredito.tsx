@@ -77,7 +77,7 @@ const DatosCredito = ({
           errors.cupo === -1 ? "bg-red-600" : "bg-green-400"
         }`}
       >
-        <h4 className="text-xl uppercase text-white text-center">
+        <h4 className="text-md md:text-xl uppercase text-white text-center">
           Cupo $ {formatWithSeparator(String(datosCredito.cupo))}
         </h4>
       </div>
@@ -85,11 +85,11 @@ const DatosCredito = ({
         {errors.cupo === -1 && "El cliente no tiene cupo suficiente"}
       </small>
       <form className="flex flex-col p-4 w-full">
-        <fieldset className="fieldset border-base-300 rounded-box border p-4">
-          <legend className="fieldset-legend uppercase font-bold text-2xl text-center">
+        <fieldset className="fieldset border-base-300 rounded-box border md:p-4">
+          <legend className="fieldset-legend uppercase font-bold text-lg md:text-2xl text-center">
             datos del cliente
           </legend>
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <div className="form-control w-full flex flex-col">
               <label htmlFor="cedula" className="label text-black">
                 Cedula
@@ -125,7 +125,7 @@ const DatosCredito = ({
               <small className="text-red-600 text-sm">{errors.nombres}</small>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-row gap-2">
             <div className="form-control w-full flex flex-col">
               <label htmlFor="periodos" className="label text-black">
                 Periodos
