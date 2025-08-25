@@ -8,7 +8,7 @@ type Props = {
 
 const ModalProducto = ({ id, producto }: Props) => {
   return (
-    <dialog id={id} className="modal modal-bottom sm:modal-middle">
+    <dialog id={id} className="modal modal-middle">
       <div className="modal-box relative">
         <form method="dialog">
           <button className="absolute top-2 right-2 cursor-pointer">
@@ -19,8 +19,8 @@ const ModalProducto = ({ id, producto }: Props) => {
           {producto?.nombre}
         </h3>
         <hr />
-        <div className="modal-body flex mt-4">
-          <img src={producto?.imagen} alt={producto?.nombre} className="w-64" />
+        <div className="modal-body flex flex-col md:flex-row mt-4">
+          <img src={producto?.imagen} alt={producto?.nombre} className="w-full md:w-64" />
           <div className="flex flex-col gap-2 p-4">
             <p>
               <strong>Referencia:</strong> {producto?.referencia}

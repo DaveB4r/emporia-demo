@@ -54,7 +54,7 @@ const Productos = () => {
     },
   ];
   return (
-    <div className="flex flex-col md:flex-row justify-between">
+    <div className="flex flex-col md:flex-row justify-between max-w-[calc(100vw-100px)]">
       <Tour tourSteps={tourSteps} path="productos"/>
       <div className="w-full md:w-[25%] min-h-64">
         <AddProduct />

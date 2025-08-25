@@ -34,7 +34,7 @@ const TableProductos = () => {
 
   const columns = [
     columnHelper.accessor("referencia", {
-      header: "Referencia",
+      header: "Ref",
       cell: (info) => <b>{info.getValue()}</b>,
     }),
     columnHelper.accessor("imagen", {
@@ -43,7 +43,7 @@ const TableProductos = () => {
         <img
           src={info.getValue()}
           alt={info.row.original.nombre}
-          className="w-20 h-20 object-cover"
+          className="w-20 h-20 object-cover hidden md:table-cell"
         />
       ),
       enableSorting: false,
@@ -53,10 +53,11 @@ const TableProductos = () => {
     }),
     columnHelper.accessor("unidades", {
       header: "Unidades",
+      cell: (info) => <p className="hidden md:table-cell">{info.getValue()}</p>
     }),
     columnHelper.accessor("precioVenta", {
       header: "Precio Venta",
-      cell: (info) => `$ ${info.getValue()}`,
+      cell: (info) => <p className="hidden md:table-cell">$ {info.getValue()}</p>,
     }),
     columnHelper.display({
       id: "acciones",
@@ -131,7 +132,16 @@ const TableProductos = () => {
                   onClick={header.column.getToggleSortingHandler()}
                   style={{
                     cursor: header.column.getCanSort() ? "pointer" : "default",
+                    // display:
+                    //   header.column.columnDef.header === "Imagen"
+                    //     ? "none"
+                    //     : header.column.columnDef.header === "Precio Venta"
+                    //     ? "none"
+                    //     : header.column.columnDef.header === "Unidades"
+                    //     ? "none"
+                    //     : "table-cell",
                   }}
+                  className={header.column.columnDef.header === "Imagen" || header.column.columnDef.header === "Precio Venta" || header.column.columnDef.header === "Unidades" ? "hidden md:table-cell" : ""}
                 >
                   {flexRender(
                     header.column.columnDef.header,
@@ -151,7 +161,7 @@ const TableProductos = () => {
             table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
+                  <td key={cell.id} className={cell.id.includes("imagen") || cell.id.includes("precioVenta") || cell.id.includes("unidades") ? "hidden md:table-cell" : ""}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

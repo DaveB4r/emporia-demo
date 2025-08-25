@@ -11,24 +11,24 @@ const TableUsuarios = ({ users }: Props) => {
       <table className="table table-zebra">
         <thead>
           <tr>
-            <th>Id</th>
+            <th className="hidden md:table-cell">Id</th>
             <th>Nombre</th>
             <th>Correo</th>
             <th>Celular</th>
-            <th>Fecha Creacion</th>
+            <th className="hidden md:table-cell">Fecha Creacion</th>
           </tr>
         </thead>
         <tbody>
           {users.length > 0 ? (
             users.map((user) => (
               <tr key={user?.id}>
-                <td>{user?.id}</td>
+                <td className="hidden md:table-cell">{user?.id}</td>
                 <td>{user?.nombre}</td>
                 <td>{user?.correo}</td>
                 <td className="text-red-600 font-black">
                   <a href={`tel:+${user?.celular}`}>{user?.celular}</a>
                 </td>
-                <td>{user?.created_at}</td>
+                <td className="hidden md:table-cell">{user?.created_at}</td>
               </tr>
             ))
           ) : (
