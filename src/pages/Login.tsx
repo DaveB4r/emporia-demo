@@ -26,11 +26,19 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     setErrors(initialUser);
     if (!data.nombre) {
       setErrors((prev) => ({
         ...prev,
         nombre: "Por favor indique su nombre completo!",
+      }));
+      return;
+    }
+    if (data.nombre.length < 3) {
+      setErrors((prev) => ({
+        ...prev,
+        nombre: "Por favor indique un nombre valido!",
       }));
       return;
     }
@@ -41,10 +49,24 @@ const Login = () => {
       }));
       return;
     }
+    if(!emailRegex.test(data.correo)) {
+      setErrors((prev) => ({
+        ...prev,
+        correo: "Por favor indique un correo valido!"
+      }));
+      return;
+    }
     if(!data.celular) {
       setErrors((prev) => ({
         ...prev,
         celular: "Por favor indique su numero de celular!"
+      }));
+      return;
+    }
+    if(data.celular.length < 10) {
+      setErrors((prev) => ({
+        ...prev,
+        celular: "Por favor indique un numero de celular valido!"
       }));
       return;
     }
@@ -120,6 +142,9 @@ const Login = () => {
                       setData((data) => ({ ...data, correo: e.target.value }))
                     }
                   />
+                  <small className="text-xs text-red-700">
+                    {errors.correo}
+                  </small>
                   <label htmlFor="celular" className="label">
                     Celular
                   </label>
@@ -133,6 +158,9 @@ const Login = () => {
                       setData((data) => ({ ...data, celular: e.target.value }))
                     }
                   />
+                  <small className="text-xs text-red-700">
+                    {errors.celular}
+                  </small>
                   <button className="btn btn-neutral mt-4" type="submit">
                     Ir a la demostracion
                   </button>
